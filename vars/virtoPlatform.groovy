@@ -41,14 +41,8 @@ def easy(body) {
 			}
 
 			stage('Build + Analyze') {		
-				timestamps { 					
-					// clean folder for a release
-					if (Packaging.getShouldPublish(this)) {
-						deleteDir()
-						checkout scm
-					}		
-					
-					Packaging.startAnalyzer(this)
+				timestamps { 						
+					//Packaging.startAnalyzer(this)
 					Packaging.runBuild(this, solution)
 				}
 			}
@@ -70,7 +64,7 @@ def easy(body) {
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
-			step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
+			//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 	    	//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
 		}
 	
