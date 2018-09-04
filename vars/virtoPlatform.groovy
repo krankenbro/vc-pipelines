@@ -68,11 +68,11 @@ def easy(body) {
 	    	//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
 		}
 	
-	  	step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
-		//Utilities.notifyBuildStatus(this, currentBuild.result)
-		}
+	step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
+	//Utilities.notifyBuildStatus(this, currentBuild.result)
 	}
 }
+
 
 // module script
 def hard(body) {
