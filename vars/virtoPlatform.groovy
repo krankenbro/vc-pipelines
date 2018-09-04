@@ -1,8 +1,88 @@
 #!groovy
 import jobs.scripts.*
 
+def call(body){
+	easy(body)
+}
+
+def easy(body) {
+	def config = [:]
+	body.resolveStrategy = Closure.DELEGATE_FIRST
+	body.delegate = config
+	body()
+
+	node {
+		def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
+		def websiteDir = 'VirtoCommerce.Platform.Web'
+		def projectType = "NET4"
+
+		if(solution == null)
+		{
+			 solution = 'VirtoCommerce.Platform.sln'
+		}
+		else
+		{
+			websiteDir = 'VirtoCommerce.Storefront'
+			webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
+		}
+		try {
+			echo "Building branch ${env.BRANCH_NAME}"
+			Utilities.notifyBuildStatus(this, "Started")
+
+			stage('Checkout') {
+				timestamps { 
+					checkout scm
+				}				
+			}
+
+			if(Utilities.checkAndAbortBuild(this))
+			{
+				return true
+			}
+
+			stage('Build + Analyze') {		
+				timestamps { 					
+					// clean folder for a release
+					if (Packaging.getShouldPublish(this)) {
+						deleteDir()
+						checkout scm
+					}		
+					
+					Packaging.startAnalyzer(this)
+					Packaging.runBuild(this, solution)
+				}
+			}
+
+			def tests = Utilities.getTestDlls(this)
+			if(tests.size() > 0)
+			{
+				stage('Tests') {
+					timestamps { 
+						Packaging.runUnitTests(this, tests)
+					}
+				}
+			}
+
+		}
+		catch (any) {
+			currentBuild.result = 'FAILURE'
+			Utilities.notifyBuildStatus(this, currentBuild.result)
+			throw any //rethrow exception to prevent the build from proceeding
+		}
+		finally {
+			Packaging.stopDockerTestEnvironment(this, dockerTag)
+			step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
+	    	//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
+		}
+	
+	  	step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
+		Utilities.notifyBuildStatus(this, currentBuild.result)
+		}
+	}
+}
+
 // module script
-def call(body) {
+def hard(body) {
 	// evaluate the body block, and collect configuration into the object
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
