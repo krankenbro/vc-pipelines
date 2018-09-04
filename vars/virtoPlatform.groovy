@@ -27,7 +27,7 @@ def easy(body) {
 		}
 		try {
 			echo "Building branch ${env.BRANCH_NAME}"
-			Utilities.notifyBuildStatus(this, "Started")
+			//Utilities.notifyBuildStatus(this, "Started")
 
 			stage('Checkout') {
 				timestamps { 
@@ -66,7 +66,7 @@ def easy(body) {
 		}
 		catch (any) {
 			currentBuild.result = 'FAILURE'
-			Utilities.notifyBuildStatus(this, currentBuild.result)
+			//Utilities.notifyBuildStatus(this, currentBuild.result)
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
@@ -75,7 +75,7 @@ def easy(body) {
 		}
 	
 	  	step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
-		Utilities.notifyBuildStatus(this, currentBuild.result)
+		//Utilities.notifyBuildStatus(this, currentBuild.result)
 		}
 	}
 }
