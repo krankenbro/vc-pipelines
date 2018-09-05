@@ -11,6 +11,8 @@ def call(body){
 		def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
 		def websiteDir = 'VirtoCommerce.Platform.Web'
 		def projectType = "NET4"
+		def solution = config.solution
+		projectType = config.projectType
 
 		if(solution == null)
 		{
