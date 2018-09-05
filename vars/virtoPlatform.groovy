@@ -43,15 +43,15 @@ def call(body){
 				}
 			}
 
-			def tests = Utilities.getTestDlls(this)
-			if(tests.size() > 0)
-			{
-				stage('Tests') {
-					timestamps { 
-						Packaging.runUnitTests(this, tests)
-					}
-				}
-			}
+			// def tests = Utilities.getTestDlls(this)
+			// if(tests.size() > 0)
+			// {
+			// 	stage('Tests') {
+			// 		timestamps { 
+			// 			Packaging.runUnitTests(this, tests)
+			// 		}
+			// 	}
+			// }
 
 		}
 		catch (any) {
@@ -60,6 +60,7 @@ def call(body){
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
+			echo "Finish"
 			//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 	    	//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
 		}
