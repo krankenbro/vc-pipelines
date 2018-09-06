@@ -1,70 +1,30 @@
 #!groovy
 import jobs.scripts.*
 
-def projectType = "NET4"
 
 def call(body){
+
+	def projectType = "NET4"
+	def solution = "VirtoCommerce.Platform.sln"
+
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = config
 	body()
 
-	node {
-		def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
-		def websiteDir = 'VirtoCommerce.Platform.Web'
-		def solution = config.solution
+	node () {
 
-		if(solution == null)
-		{
-			 solution = 'VirtoCommerce.Platform.sln'
+		stage ('Chekcout') {
+			checkout scm;
 		}
-		else
-		{
-			websiteDir = 'VirtoCommerce.Storefront'
-			webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
+		stage ('Nuget') {
+			bat "nuget restore ${solution}"
 		}
-		try {
-			echo "Building branch ${env.BRANCH_NAME}"
-			//Utilities.notifyBuildStatus(this, "Started")
-
-			stage('Checkout') {
-				timestamps { 
-					checkout scm
-				}				
-			}
-
-			if(Utilities.checkAndAbortBuild(this))
-			{
-				return true
-			}
-
-			stage('Build + Analyze') {		
-				timestamps { 						
-					//Packaging.startAnalyzer(this)
-					Packaging.runBuild(this, solution)
-				}
-			}
-
-			// def tests = Utilities.getTestDlls(this)
-			// if(tests.size() > 0)
-			// {
-			// 	stage('Tests') {
-			// 		timestamps { 
-			// 			Packaging.runUnitTests(this, tests)
-			// 		}
-			// 	}
-			// }
-
-		}
-		catch (any) {
-			currentBuild.result = 'FAILURE'
-			//Utilities.notifyBuildStatus(this, currentBuild.result)
-			throw any //rethrow exception to prevent the build from proceeding
-		}
-		finally {
-			echo "Finish"
-			//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
-	    	//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
+		stage ('Build') {
+			bat "\"${tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+			// bat """ 
+			// dotnet vstest "%WORKSPACE%\VirtoCommerce.Platform.Tests\bin\Release\VirtoCommerce.Platform.Test.dll" --Framework:Framework45 --TestCaseFilter:"Category=CI" --ResultsDirectory:testResult --logger:trx 
+			// """ 
 		}
 	}
 }
