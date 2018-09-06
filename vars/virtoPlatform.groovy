@@ -1,12 +1,13 @@
 #!groovy
 import jobs.scripts.*
 
+def projectType = "NET4"
+
 def call(body){
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = config
 	body()
-	def projectType = "NET4"
 
 	node {
 		def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
