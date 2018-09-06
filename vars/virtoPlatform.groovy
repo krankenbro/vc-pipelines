@@ -23,7 +23,7 @@ def call(body){
 			bat "nuget restore ${solution}"
 		}
 		stage ('Build') {
-			bat "\"${tool 'DefaultMSBuild'}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+			bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 			// bat """ 
 			// dotnet vstest "%WORKSPACE%\VirtoCommerce.Platform.Tests\bin\Release\VirtoCommerce.Platform.Test.dll" --Framework:Framework45 --TestCaseFilter:"Category=CI" --ResultsDirectory:testResult --logger:trx 
 			// """ 
