@@ -6,11 +6,11 @@ def call(body){
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = config
 	body()
+	def projectType = "NET4"
 
 	node {
 		def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
 		def websiteDir = 'VirtoCommerce.Platform.Web'
-		def projectType = "NET4"
 		def solution = config.solution
 
 		if(solution == null)
