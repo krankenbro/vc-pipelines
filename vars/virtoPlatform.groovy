@@ -35,6 +35,9 @@ def call(body){
 			}
 		}
 		def tests = Utilities.getTestDlls(this)
+		if(projectType == "NETCORE2" && test.size() < 1) {
+			tests = findFiles(glob: '**\\bin\\Debug\\*\\*Test.dll')
+		}
 		if(tests.size() > 0)
 		{
 			stage('Tests') {
