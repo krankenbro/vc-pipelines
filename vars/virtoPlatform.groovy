@@ -47,7 +47,7 @@ def call(body){
 						def test = tests[i]
 						paths += "\"$test.path\" "
 					}
-					bat "\"${env.XUnit}\\xunit.console.exe}\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+					bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 				}
 			}
 		}
