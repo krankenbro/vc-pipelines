@@ -13,25 +13,25 @@ def call(body){
 	body.delegate = config
 	body()
 	solution = config.solution
+	projectType = config.projectType
 	node () {
 		if(solution == null) {
 			solution = "VirtoCommerce.Platform.sln"
 		}
+		if(projectType == null) {
+			projectType = "NET4"
+		}
+
 		stage ('Chekcout') {
 			checkout scm;
 		}
-		stage ('Nuget') {
-			bat "nuget restore ${solution}"
-		}
-		stage ('Build') {
-			if(solution == "VirtoCommerce.Platform.sln") {
-				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
-				// bat """ 
-				// dotnet vstest "%WORKSPACE%\VirtoCommerce.Platform.Tests\bin\Release\VirtoCommerce.Platform.Test.dll" --Framework:Framework45 --TestCaseFilter:"Category=CI" --ResultsDirectory:testResult --logger:trx 
-				// """ 
-			}
-			else if(solution == "VirtoCommerce.Storefront.sln") {
+		stage ('Build & Restore') {
+			if(projectType == "NETCORE2") {
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
+			}
+			else  {
+				bat "nuget restore ${solution}"
+				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 			}
 		}
 		def tests = Utilities.getTestDlls(this)
