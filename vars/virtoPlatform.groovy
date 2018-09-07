@@ -6,8 +6,8 @@ import jobs.scripts.*
 
 def call(body){
 
-	def projectType = "NET4"
-	def solution = "VirtoCommerce.Platform.sln"
+	projectType = "NET4"
+	solution = "VirtoCommerce.Platform.sln"
 
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
