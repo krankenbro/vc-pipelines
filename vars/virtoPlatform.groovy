@@ -34,6 +34,15 @@ def call(body){
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
 			}
 		}
+		def tests = Utilities.getTestDlls(this)
+		if(tests.size() > 0)
+		{
+			stage('Tests') {
+				timestamps { 
+					Packaging.runUnitTests(this, tests)
+				}
+			}
+		}
 	}
 }
 
