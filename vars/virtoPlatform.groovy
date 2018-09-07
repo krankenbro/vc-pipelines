@@ -7,15 +7,16 @@ import jobs.scripts.*
 def call(body){
 
 	projectType = "NET4"
-	solution = "VirtoCommerce.Platform.sln"
 
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = config
 	body()
-
+	solution = config.solution
 	node () {
-
+		if(solution == null) {
+			solution = "VirtoCommerce.Platform.sln"
+		}
 		stage ('Chekcout') {
 			checkout scm;
 		}
