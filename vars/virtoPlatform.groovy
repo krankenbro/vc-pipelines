@@ -39,7 +39,15 @@ def call(body){
 		{
 			stage('Tests') {
 				timestamps { 
-					Packaging.runUnitTests(this, tests)
+					String paths = ""
+					String traits = "-trait \"category=ci\" -trait \"category=Unit\""
+					String resultsFileName = "xUnit.UnitTests.xml"
+					for(int i = 0; i < tests.size(); i++)
+					{
+						def test = tests[i]
+						paths += "\"$test.path\" "
+					}
+					bat "\"${xUnitExecutable}\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 				}
 			}
 		}
