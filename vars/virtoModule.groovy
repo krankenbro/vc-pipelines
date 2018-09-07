@@ -27,7 +27,7 @@ def call(body) {
 				{
 					def solution = solutions[i]
 					bat "Nuget restore ${solution}"
-            		bat "\"${tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+            		bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 				}
 			} 
 		}
