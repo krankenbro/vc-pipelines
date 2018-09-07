@@ -20,7 +20,7 @@ def call(body) {
 		}
 
 		stage("Build") {
-			def solutions = context.findFiles(glob: '*.sln')
+			def solutions = findFiles(glob: '*.sln')
 
 			if (solutions.size() > 0) {
 				for (int i = 0; i < solutions.size(); i++)
