@@ -20,7 +20,16 @@ def call(body) {
 		}
 
 		stage("Build") {
-			Packaging.buildSolutions(this)
+			def solutions = context.findFiles(glob: '*.sln')
+
+			if (solutions.size() > 0) {
+				for (int i = 0; i < solutions.size(); i++)
+				{
+					def solution = solutions[i]
+					bat "Nuget restore ${solution}"
+            		bat "\"${tool DefaultMSBuild}\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+				}
+			} 
 		}
 	}
 }
