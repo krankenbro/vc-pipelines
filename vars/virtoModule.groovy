@@ -3,7 +3,7 @@ import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
 
-    def call(body) {
+def call(body) {
 
     // evaluate the body block, and collect configuration into the object
     def config = [:]
@@ -23,6 +23,7 @@ import jobs.scripts.*
 			Packaging.buildSolutions(this)
 		}
 	}
+}
 
     def hard(body) {
 
