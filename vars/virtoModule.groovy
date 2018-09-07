@@ -13,6 +13,27 @@ import jobs.scripts.*
 
     node
     {
+		stage ("Checkout") {
+			timestamps {
+				checkout scm
+			}
+		}
+
+		stage("Build") {
+			Packaging.buildSolutions(this)
+		}
+	}
+
+    def hard(body) {
+
+    // evaluate the body block, and collect configuration into the object
+    def config = [:]
+    body.resolveStrategy = Closure.DELEGATE_FIRST
+    body.delegate = config
+    body()
+
+    node
+    {
 	    def deployScript = 'VC-Module2AzureDev.ps1'
 		def dockerTag = env.BRANCH_NAME
 		def buildOrder = Utilities.getNextBuildOrder(this)
