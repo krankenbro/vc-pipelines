@@ -31,6 +31,32 @@ def call(body) {
 				}
 			} 
 		}
+
+		def tests = Utilities.getTestDlls(this)
+		if(projectType == "NETCORE2" && tests.size() < 1) {
+			tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
+		}
+		if(tests.size() > 0)
+		{
+			stage('Tests') {
+				timestamps { 
+					String paths = ""
+					String traits = "-trait \"category=ci\" -trait \"category=Unit\""
+					String resultsFileName = "xUnit.UnitTests.xml"
+					for(int i = 0; i < tests.size(); i++)
+					{
+						def test = tests[i]
+						paths += "\"$test.path\" "
+					}
+					if(projectType == "NETCORE2") {
+						bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
+					}
+					else {
+						bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+					}
+				}
+			}
+		}
 	}
 }
 
