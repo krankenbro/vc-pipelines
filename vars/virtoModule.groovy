@@ -10,9 +10,15 @@ def call(body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
     body()
+	projectType = config.projectType
 
     node
     {
+		
+		if(projectType == null) {
+			projectType = "NET4"
+		}
+
 		stage ("Checkout") {
 			timestamps {
 				checkout scm
