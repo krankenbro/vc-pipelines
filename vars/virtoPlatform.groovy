@@ -50,7 +50,12 @@ def call(body){
 						def test = tests[i]
 						paths += "\"$test.path\" "
 					}
-					bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+					if(projectType == "NETCORE2") {
+						bat "\"dotnet vstest\" ${paths} --TestCaseFilter:\"Category=Unit\""
+					}
+					else {
+						bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+					}
 				}
 			}
 		}
