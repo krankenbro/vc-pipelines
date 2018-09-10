@@ -33,7 +33,9 @@ def call(body) {
 				{
 					def solution = solutions[i]
 					bat "Nuget restore ${solution}"
+					Packaging.startAnalyzer(this)
             		bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+					Packaging.endAnalyzer(this)
 				}
 			} 
 		}
