@@ -20,6 +20,7 @@ class Utilities {
 
     def static getRepoName(context)
     {
+        echo "job name is \"${context.env.JOB_NAME}\""
         def tokens = "${context.env.JOB_NAME}".tokenize('/')
         def REPO_NAME = tokens[1]
         return REPO_NAME
