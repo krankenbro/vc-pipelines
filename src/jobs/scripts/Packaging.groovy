@@ -227,7 +227,7 @@ class Packaging {
         def sqScannerMsBuildHome = context.tool 'Scanner for MSBuild'
         def fullJobName = Utilities.getRepoName(context)
         context.withSonarQubeEnv('VC Sonar Server') {
-            context.bat "\"${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe\" end"
+            context.bat "\"${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe\" end /d:sonar.login=%SONAR_AUTH_TOKEN%" //https://jira.sonarsource.com/browse/SONARMSBRU-378
         }        
     }
 
