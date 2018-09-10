@@ -22,10 +22,10 @@ def call(body){
 			projectType = "NET4"
 		}
 
-		stage ('Chekcout') {
+		stage ('Checkout') {
 			checkout scm;
 		}
-		stage ('Build & Restore') {
+		stage ('Build & Analyze') {
 			if(projectType == "NETCORE2") {
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
 			}
