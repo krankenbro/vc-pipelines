@@ -26,10 +26,12 @@ def call(body){
 			checkout scm;
 		}
 		stage ('Build & Analyze') {
-			if(projectType == "NETCORE2") {
+			if(projectType == "NETCORE2") { //storefront
+				bat 'SonarQube.Scanner.MSBuild.exe begin /k:"storefront-core" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="d341a7700d474b68fe498533e25c799886d6da38"'
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
+				bat 'SonarQube.Scanner.MSBuild.exe end /d:sonar.login="d341a7700d474b68fe498533e25c799886d6da38"'
 			}
-			else  {
+			else  { //platform
 				bat "nuget restore ${solution}"
 				bat 'SonarQube.Scanner.MSBuild.exe begin /k:"vc-platform" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="9734f7ac7aec236db226fb1cd1ed41e748f0ea49"'
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
