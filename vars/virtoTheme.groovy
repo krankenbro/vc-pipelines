@@ -1,8 +1,19 @@
 #!groovy
 import jobs.scripts.*
 
-// module script
+
 def call(body) {
+	def config = [:]
+	body.resolveStrategy = Closure.DELEGATE_FIRST
+	body.delegate = config
+	body()
+	node {
+		echo "stub"
+	}
+}
+
+// module script
+def _call(body) {
 	// evaluate the body block, and collect configuration into the object
 	def config = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
