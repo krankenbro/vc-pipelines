@@ -31,7 +31,9 @@ def call(body){
 			}
 			else  {
 				bat "nuget restore ${solution}"
+				bat 'SonarQube.Scanner.MSBuild.exe begin /k:"vc-platform" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="platform"'
 				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+				bat 'SonarQube.Scanner.MSBuild.exe end /d:sonar.login="platform"'
 			}
 		}
 		def tests = Utilities.getTestDlls(this)
