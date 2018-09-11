@@ -23,19 +23,21 @@ def call(body){
 		}
 
 		stage ('Checkout') {
-			checkout scm;
+			timestamps {
+				checkout scm;
+			}
 		}
 		stage ('Build & Analyze') {
-			if(projectType == "NETCORE2") { //storefront
-				Packaging.startAnalyzer(this)
-				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
-				Packaging.endAnalyzer(this)
-			}
-			else  { //platform
-				bat "nuget restore ${solution}"
-				Packaging.startAnalyzer(this)
-				bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
-				Packaging.endAnalyzer(this)
+			timestamps {
+				if(projectType == "NETCORE2") { //storefront
+					Packaging.startAnalyzer(this)
+					bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
+				}
+				else  { //platform
+					bat "nuget restore ${solution}"
+					Packaging.startAnalyzer(this)
+					bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+				}
 			}
 		}
 		def tests = Utilities.getTestDlls(this)
@@ -61,6 +63,11 @@ def call(body){
 						bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 					}
 				}
+			}
+		}
+		stage('Stop Analyze') {
+			timestamps {
+				Packaging.endAnalyzer(this)
 			}
 		}
 	}
