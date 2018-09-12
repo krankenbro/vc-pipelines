@@ -70,10 +70,12 @@ def call(body){
 				Packaging.endAnalyzer(this)
 			}
 		}
-		
+
 		// No need to occupy a node
 		stage("Quality Gate"){
-			Packaging.checkAnalyzerGate(this)
+			timestamps {
+				Packaging.checkAnalyzerGate(this)
+			}
 		}
 	}
 }
