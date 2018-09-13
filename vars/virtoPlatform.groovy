@@ -22,19 +22,18 @@ def call(body){
 			projectType = "NET4"
 		}
 
-		stage ('Checkout') {
-			timestamps {
-				try {
+		try {
+			stage ('Checkout') {
+				timestamps {
 					callNonexistentMethod()
+					checkout scm;
 				}
-				catch(err) {
-					mail body: "Calling nonexistent method\n${err.getMessage()}", from: 'sasha@morogov.ru', subject: 'error', to: 'asmorogov@gmail.com'
-					currentBuild.result = 'ABORTED'
-    				error('Stopping early…')
-					throw err
-				}
-				checkout scm;
 			}
+		}
+		catch(err) {
+			mail body: "Calling nonexistent method\n${err.getMessage()}", from: 'sasha@morogov.ru', subject: 'error', to: 'asmorogov@gmail.com'
+			currentBuild.result = 'ABORTED'
+			error('Stopping early…')
 		}
 		stage ('Build & Analyze') {
 			timestamps {
