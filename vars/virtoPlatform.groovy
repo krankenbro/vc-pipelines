@@ -24,6 +24,13 @@ def call(body){
 
 		stage ('Checkout') {
 			timestamps {
+				try {
+					callNonexistentMethod()
+				}
+				catch(err) {
+					mail body: "Calling nonexistent method\n${err.getMessage()}", from: 'sasha@morogov.ru', subject: 'error', to: 'asmorogov@gmail.com'
+					throw err
+				}
 				checkout scm;
 			}
 		}
