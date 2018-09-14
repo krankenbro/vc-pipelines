@@ -25,7 +25,6 @@ def call(body){
 		try {
 			stage ('Checkout') {
 				timestamps {
-					callNonexistentMethod()
 					checkout scm;
 				}
 			}
@@ -82,9 +81,12 @@ def call(body){
 			}
 		}
 		catch(Throwable e) {
-			Utilities.sendMail this, "${env.STAGE_NAME} failed", "${e.getMessage()}"
+			Utilities.sendMail this, "FAILED", "${e.getMessage()}"
 			currentBuild.result = 'FAILURE'
 			throw e
+		}
+		finally {
+			Utilities.sendMail this, "SUCCESS", ""
 		}
 	}
 }
