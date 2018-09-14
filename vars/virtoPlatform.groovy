@@ -81,11 +81,11 @@ def call(body){
 				}
 			}
 		}
-		catch(Exception e) {
+		catch(any) {
 			echo 'catch'
-			mail body: "Calling nonexistent method\n${e.getMessage()}", from: 'sasha@morogov.ru', subject: "${env.STAGE_NAME} failed", to: 'asmorogov@gmail.com'
+			mail body: "Calling nonexistent method\n${any.getMessage()}", from: 'sasha@morogov.ru', subject: "${env.STAGE_NAME} failed", to: 'asmorogov@gmail.com'
 			currentBuild.result = 'FAILURE'
-			throw err
+			throw any
 		}
 		finally {
 			echo 'finally'
