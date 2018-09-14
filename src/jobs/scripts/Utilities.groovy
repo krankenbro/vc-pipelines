@@ -280,6 +280,16 @@ class Utilities {
 		return stagingName
 	}
 
+    def static sendMail(context, subject, body, mailTo = null, mailFrom = null) {
+        if(mailFrom == null){
+            mailFrom = context.env.DefaultMailFrom
+        }
+        if(mailTo == null) {
+            mailTo = context.env.DefaultMailTo
+        }
+        context.mail body: body, from: mailFrom, subject: subject, to: mailTo
+    }
+
     @NonCPS
     def static jsonParse(def json) {
         new groovy.json.JsonSlurperClassic().parseText(json)
