@@ -83,7 +83,7 @@ def call(body){
 		}
 		catch(err) {
 			mail body: "Calling nonexistent method\n${err.getMessage()}", from: 'sasha@morogov.ru', subject: "${env.STAGE_NAME} failed", to: 'asmorogov@gmail.com'
-			currentBuild.result = 'ABORTED'
+			currentBuild.result = 'FAILURE'
 			throw err
 		}
 	}
