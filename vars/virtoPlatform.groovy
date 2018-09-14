@@ -89,7 +89,6 @@ def call(body){
 		}
 		finally {
 			echo 'finally'
-			mail body: "Calling nonexistent method\n${e.getMessage()}", from: 'sasha@morogov.ru', subject: "${env.STAGE_NAME} failed", to: 'asmorogov@gmail.com'
 		}
 	}
 }
