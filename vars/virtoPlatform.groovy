@@ -81,7 +81,7 @@ def call(body){
 				}
 			}
 		}
-		catch(any) {
+		catch(NoSuchMethodError any) {
 			echo 'catch'
 			mail body: "Calling nonexistent method\n${any.getMessage()}", from: 'sasha@morogov.ru', subject: "${env.STAGE_NAME} failed", to: 'asmorogov@gmail.com'
 			currentBuild.result = 'FAILURE'
