@@ -153,3 +153,6 @@ $RECYCLE.BIN/
 
 .vs/
 .vscode/
+.idea/
+*.gdsl
+pom.xml

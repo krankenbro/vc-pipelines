@@ -48,7 +48,7 @@ def call(body){
 			}
 			if(tests.size() > 0)
 			{
-				stage('Tests') {
+				stage('Tests') { emaile
 					timestamps { 
 						String paths = ""
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
@@ -81,7 +81,7 @@ def call(body){
 			}
 		}
 		catch(Throwable e) {
-			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n\n\n${currentBuild.rawBuild.getLog(50).join("\n")}"
+			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n\n\n${currentBuild.rawBuild.getLog(15).join("\n")}"
 			currentBuild.result = 'FAILED'
 			throw e
 		}
