@@ -290,6 +290,18 @@ class Utilities {
         context.mail body: "Job url: ${context.env.JOB_URL}\n${body}", from: mailFrom, subject: "${context.env.JOB_NAME}:${context.env.BUILD_NUMBER} - ${subject}", to: mailTo
     }
 
+    static int getFailedStageLog(context) {
+        def log = context.currentBuild.rawBuild.getLog()
+        def res = 15 //15 last lines of log by default
+        log.revert().eachWithIndex {
+            logRow, index ->
+                if(logRow ==~ /\{\s\(.*\)/){
+                    res = index + 1
+                }
+        }
+        return res
+    }
+
     @NonCPS
     def static jsonParse(def json) {
         new groovy.json.JsonSlurperClassic().parseText(json)
