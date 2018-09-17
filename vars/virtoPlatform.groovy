@@ -87,7 +87,7 @@ def call(body){
 		}
 		finally {
 			if(currentBuild.result != 'FAILED') {
-				Utilities.sendMail this, "${currentBuild.status}", ""
+				Utilities.sendMail this, "${currentBuild.currentResult}", ""
 			}
 		}
 	}
