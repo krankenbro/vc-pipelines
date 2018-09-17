@@ -81,7 +81,7 @@ def call(body){
 			}
 		}
 		catch(Throwable e) {
-			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n\n\n${currentBuild.rawBuild.getLog(50)}"
+			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n\n\n${currentBuild.rawBuild.getLog(50).join("\n")}"
 			currentBuild.result = 'FAILED'
 			throw e
 		}
