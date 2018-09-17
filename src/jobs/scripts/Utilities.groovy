@@ -287,7 +287,7 @@ class Utilities {
         if(mailTo == null) {
             mailTo = context.env.DefaultMailTo
         }
-        context.mail body: "Job url: ${context.env.JOB_URL}\n${body}", from: mailFrom, subject: "${context.env.JOB_NAME} - ${subject}", to: mailTo
+        context.mail body: "Job url: ${context.env.JOB_URL}\n${body}", from: mailFrom, subject: "${context.env.JOB_NAME}:${context.env.BUILD_NUMBER} - ${subject}", to: mailTo
     }
 
     @NonCPS
