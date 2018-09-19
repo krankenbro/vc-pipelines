@@ -293,7 +293,7 @@ class Utilities {
     static int getFailedStage(logArray) {
         def log = logArray
         def startIndex = 15 //15 last lines of log by default
-        log.revert().eachWithIndex {
+        log.reverse().eachWithIndex {
             logRow, index ->
                 if(logRow ==~ /\{\s\(.*\)/){
                     startIndex = index + 1
