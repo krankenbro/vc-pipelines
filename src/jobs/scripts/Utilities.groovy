@@ -295,7 +295,7 @@ class Utilities {
         def startIndex = 15 //15 last lines of log by default
         log.reverse().eachWithIndex {
             logRow, index ->
-                if(logRow ==~ /\{\s\(.*\)/){
+                if(logRow =~ /\{\s\(.*\)/){
                     startIndex = index + 1
                 }
         }
