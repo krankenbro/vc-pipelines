@@ -82,7 +82,7 @@ def call(body){
 		}
 		catch(Throwable e) {
 			currentBuild.result = 'FAILURE'
-			def log = currentBuild.rawBuild.getLog()
+			def log = currentBuild.rawBuild.getLog(100)
 			def failedStageLog = Utilities.getFailedStage(log)
 			Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageLog}"
 			throw e
