@@ -48,7 +48,7 @@ def call(body){
 			}
 			if(tests.size() > 0)
 			{
-				stage('Tests') { emaile
+				stage('Tests') {
 					timestamps { 
 						String paths = ""
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
