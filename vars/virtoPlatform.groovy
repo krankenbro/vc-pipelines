@@ -89,7 +89,7 @@ def call(body){
 		}
 		finally {
 			if(currentBuild.result != 'FAILED') {
-				Utilities.sendMail context:this, subject:"${currentBuild.result}"
+				Utilities.sendMail(this, "${currentBuild.result}")
 			}
 		}
 	}
