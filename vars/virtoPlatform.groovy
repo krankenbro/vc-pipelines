@@ -2,6 +2,7 @@
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
+import org.codehaus.groovy.tools.Utilities
 
 
 def call(body){
@@ -81,7 +82,9 @@ def call(body){
 			}
 		}
 		catch(Throwable e) {
-			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n\n\n${currentBuild.rawBuild.getLog(15).join("\n")}"
+			def log = currentBuild.rawBuild.getLog()
+			def failedStageLog = Utilities.getFailedStage(log)
+			Utilities.sendMail this, "FAILED", "${e.getMessage()}\n${e.getCause()}\n${failedStageLog}"
 			currentBuild.result = 'FAILED'
 			throw e
 		}

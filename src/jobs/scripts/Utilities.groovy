@@ -290,16 +290,17 @@ class Utilities {
         context.mail body: "Job url: ${context.env.JOB_URL}\n${body}", from: mailFrom, subject: "${context.env.JOB_NAME}:${context.env.BUILD_NUMBER} - ${subject}", to: mailTo
     }
 
-    static int getFailedStageLog(logArray) {
+    static int getFailedStage(logArray) {
         def log = logArray
-        def res = 15 //15 last lines of log by default
+        def startIndex = 15 //15 last lines of log by default
         log.revert().eachWithIndex {
             logRow, index ->
                 if(logRow ==~ /\{\s\(.*\)/){
-                    res = index + 1
+                    startIndex = index + 1
                 }
         }
-        return res
+        def result = logArray[logArray.length() - startIndex..-1].join("\n")
+        return result
     }
 
     @NonCPS
