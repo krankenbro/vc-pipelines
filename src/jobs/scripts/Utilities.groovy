@@ -312,6 +312,11 @@ class Utilities {
         return result
     }
 
+    def static getSwaggerDll(context){
+        def swagger = context.findFiles(glob: '**\\*.Web.dll')
+        return swagger
+    }
+
     @NonCPS
     def static jsonParse(def json) {
         new groovy.json.JsonSlurperClassic().parseText(json)

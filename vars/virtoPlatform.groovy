@@ -14,6 +14,7 @@ def call(body){
 	body()
 	solution = config.solution
 	projectType = config.projectType
+	def swaggerTargetPlatformDll = 'VirtoCommerce.Platform.Web.dll'
 	node () {
 		if(solution == null) {
 			solution = "VirtoCommerce.Platform.sln"
@@ -77,6 +78,23 @@ def call(body){
 			stage("Quality Gate"){
 				timestamps {
 					Packaging.checkAnalyzerGate(this)
+				}
+			}
+
+			if(projectType == 'NET4') {
+				stage('Swagger Validation') {
+					timestamps {
+						def swagDlls = findFiles(glob: "**\\${swaggerTargetPlatformDll}")
+						if(swagDlls.size() > 0)
+						{
+							def swagPaths = ""
+							for(swagDll in swagDlls){
+								swagPaths += "\"$swagDll.path\""
+							}
+						}
+						bat "nswag webapi2swagger /assembly:${swagPaths} /output:${env.WORKSPACE}\\swagger.json"
+						bat "swagger-cli validate ${env.WORKSPACE}\\swagger.json"
+					}
 				}
 			}
 		}
