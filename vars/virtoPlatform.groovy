@@ -84,10 +84,10 @@ def call(body){
 			if(projectType == 'NET4') {
 				stage('Swagger Validation') {
 					timestamps {
+						String swagPaths = ""
 						def swagDlls = findFiles(glob: "**\\${swaggerTargetPlatformDll}")
 						if(swagDlls.size() > 0)
 						{
-							String swagPaths = ""
 							for(swagDll in swagDlls){
 								swagPaths += "\"$swagDll.path\""
 							}
