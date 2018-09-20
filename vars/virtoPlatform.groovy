@@ -87,7 +87,7 @@ def call(body){
 						def swagDlls = findFiles(glob: "**\\${swaggerTargetPlatformDll}")
 						if(swagDlls.size() > 0)
 						{
-							def swagPaths = ""
+							String swagPaths = ""
 							for(swagDll in swagDlls){
 								swagPaths += "\"$swagDll.path\""
 							}
