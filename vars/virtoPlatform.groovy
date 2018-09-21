@@ -55,6 +55,17 @@ def call(body){
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
 						String resultsFileName = "xUnit.UnitTests.xml"
 						String coverageFolder = Utilities.getCoverageFolder(this)
+						// remove old folder
+						context.dir(coverageFolder)
+								{
+									context.deleteDir()
+								}
+
+						// recreate it now
+						File folder = new File(coverageFolder);
+						if (!folder.mkdir()) {
+							throw new Exception("can't create coverage folder: " + coverageFolder);
+						}
 						for(int i = 0; i < tests.size(); i++)
 						{
 							def test = tests[i]
