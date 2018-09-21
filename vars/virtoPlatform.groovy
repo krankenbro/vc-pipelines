@@ -54,6 +54,7 @@ def call(body){
 						String paths = ""
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
 						String resultsFileName = "xUnit.UnitTests.xml"
+						String coverageFolder = Utilities.getCoverageFolder(this)
 						for(int i = 0; i < tests.size(); i++)
 						{
 							def test = tests[i]
@@ -63,7 +64,8 @@ def call(body){
 							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 						}
 						else {
-							bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\\coverage.xml\" -register:user -target:\"${env.XUnit}\\xunit.console.exe\" -targetargs:\"${paths} ${traits}\""
+							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
 				}
