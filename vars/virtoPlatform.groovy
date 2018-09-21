@@ -68,7 +68,7 @@ def call(body){
 					}
 				}
 			}
-			stage('Stop Analyze') {
+			stage('Submit Analyze') {
 				timestamps {
 					Packaging.endAnalyzer(this)
 				}

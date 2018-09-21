@@ -80,14 +80,34 @@ def call(body) {
 					Packaging.checkAnalyzerGate(this)
 				}
 			}
+
+			stage('Swagger Validation') {
+				timestamps {
+					String swagPaths = ""
+					def swagDlls = findFiles(glob: "VirtoCommerce.Platform.Web\\bin\\${swaggerTargetPlatformDll}")
+					if(swagDlls.size() > 0)
+					{
+						for(swagDll in swagDlls){
+							if(!swagDll.path.contains("VirtoCommerce.Platform.Core.Web.dll"))
+								swagPaths += "\"$swagDll.path\""
+						}
+					}
+					bat "nswag webapi2swagger /assembly:${swagPaths} /output:${env.WORKSPACE}\\swagger.json"
+					bat "swagger-cli validate ${env.WORKSPACE}\\swagger.json"
+				}
+			}
 		}
 		catch(Throwable e) {
-			Utilities.sendMail this, "FAILED", "${e.getMessage()}"
 			currentBuild.result = 'FAILURE'
+			def log = currentBuild.rawBuild.getLog(100)
+			def failedStageLog = Utilities.getFailedStage(log)
+			Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageLog}"
 			throw e
 		}
 		finally {
-			Utilities.sendMail this, "SUCCESS", ""
+			if(currentBuild.result != 'FAILURE') {
+				Utilities.sendMail(this, "${currentBuild.currentResult}")
+			}
 		}
 	}
 }
