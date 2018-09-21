@@ -84,7 +84,7 @@ def call(body) {
 			stage('Swagger Validation') {
 				timestamps {
 					String swagPaths = ""
-					def swagDlls = findFiles(glob: "VirtoCommerce.Platform.Web\\bin\\${swaggerTargetPlatformDll}")
+					def swagDlls = findFiles(glob: "**\\bin\\*.Web.dll")
 					if(swagDlls.size() > 0)
 					{
 						for(swagDll in swagDlls){
