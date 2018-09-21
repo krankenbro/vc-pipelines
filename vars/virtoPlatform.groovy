@@ -56,9 +56,9 @@ def call(body){
 						String resultsFileName = "xUnit.UnitTests.xml"
 						String coverageFolder = Utilities.getCoverageFolder(this)
 						// remove old folder
-						context.dir(coverageFolder)
+						dir(coverageFolder)
 								{
-									context.deleteDir()
+									deleteDir()
 								}
 
 						// recreate it now
