@@ -64,7 +64,7 @@ def call(body){
 
 						// recreate it now
 						File folder = new File(coverageResultFolder);
-						if (!folder.mkdir()) {
+						if (!folder.mkdirs()) {
 							throw new Exception("can't create coverage folder: " + coverageResultFolder);
 						}
 						for(int i = 0; i < tests.size(); i++)
