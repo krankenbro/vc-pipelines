@@ -218,7 +218,7 @@ class Packaging {
         def coverageFolder = Utilities.getCoverageFolder(context)
         context.withSonarQubeEnv('VC Sonar Server') {
             // Due to SONARMSBRU-307 value of sonar.host.url and credentials should be passed on command line
-            context.bat "\"${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe\" begin /d:\"sonar.branch=${context.env.BRANCH_NAME}\" /n:\"${fullJobName}\" /k:\"${fullJobName}\" /d:sonar.host.url=%SONAR_HOST_URL% /d:sonar.login=%SONAR_AUTH_TOKEN% /d:sonar.cs.vscoveragexml.reportsPaths=\"${coverageFolder}\\VisualStudio.Unit.coveragexml\"" // -/d:\"sonar.organization=virtocommerce\"
+            context.bat "\"${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe\" begin /d:\"sonar.branch=${context.env.BRANCH_NAME}\" /n:\"${fullJobName}\" /k:\"${fullJobName}\" /d:sonar.host.url=%SONAR_HOST_URL% /d:sonar.login=%SONAR_AUTH_TOKEN% /d:sonar.cs.opencover.reportsPaths=\"${coverageFolder}\\VisualStudio.Unit.coveragexml\"" // -/d:\"sonar.organization=virtocommerce\"
         }        
     }
 
