@@ -55,7 +55,6 @@ def call(body){
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
 						String resultsFileName = "xUnit.UnitTests.xml"
 						String coverageFolder = Utilities.getCoverageFolder(this)
-						String coverageResultFolder = "${coverageFolder}\\VisualStudio.Unit.coveragexml"
 						// remove old folder
 						dir(coverageFolder)
 								{
@@ -63,9 +62,9 @@ def call(body){
 								}
 
 						// recreate it now
-						File folder = new File(coverageResultFolder);
+						File folder = new File(coverageFolder);
 						if (!folder.mkdirs()) {
-							throw new Exception("can't create coverage folder: " + coverageResultFolder);
+							throw new Exception("can't create coverage folder: " + coverageFolder);
 						}
 						for(int i = 0; i < tests.size(); i++)
 						{
@@ -76,7 +75,7 @@ def call(body){
 							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 						}
 						else {
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -output:\"${coverageResultFolder}\\coverage.xml\" -register:user -target:\"${env.XUnit}\\xunit.console.exe\" -targetargs:\"${paths} ${traits}\""
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.XUnit}\\xunit.console.exe\" -targetargs:\"${paths} ${traits}\""
 							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
