@@ -218,7 +218,7 @@ class Packaging {
         def coverageFolder = Utilities.getCoverageFolder(context)
 
         context.dir("${context.env.WORKSPACE}\\.sonarqube"){
-            deleteDir()
+            context.deleteDir()
         }
 
         context.withSonarQubeEnv('VC Sonar Server') {
