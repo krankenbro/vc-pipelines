@@ -75,7 +75,7 @@ def call(body){
 							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 						}
 						else {
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -oldStyle -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -oldStyle -filter:\"+[*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
 							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
