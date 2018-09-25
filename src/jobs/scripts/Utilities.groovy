@@ -320,7 +320,7 @@ class Utilities {
     @NonCPS
     def static getPDBDirs(context){
         def pdbDirs = []
-        currentDir = new File(context.pwd())
+        def currentDir = new File(context.pwd())
         currentDir.eachDirRecurse(){ dir->
             if(dir.getPath() =~ /.*\\bin/)
                 pdbDirs << dir.path
