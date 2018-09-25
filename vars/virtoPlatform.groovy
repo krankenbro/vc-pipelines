@@ -53,9 +53,9 @@ def call(body){
 				def pdbDirs = []
 				currentDir = new File("${env.WORKSPACE}")
 				currentDir.eachDirRecurse(){dir->
-					echo dir.getPath()
+					echo dir.path
 					if(dir.getPath() =~ /.*\\bin/)
-						pdbDirs << dir.getPath()
+						pdbDirs << dir.path
 				}
 				stage('Tests') {
 					timestamps { 
