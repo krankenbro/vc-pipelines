@@ -77,7 +77,7 @@ def call(body){
 						if(projectType == "NETCORE2") {
 							//bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 							def pdbDirs = Utilities.getPDBDirsStr(this)
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""
 						}
 						else {
 							def pdbDirs = Utilities.getPDBDirsStr(this)
