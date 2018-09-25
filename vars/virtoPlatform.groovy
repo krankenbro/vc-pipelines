@@ -48,17 +48,11 @@ def call(body){
 			if(projectType == "NETCORE2" && tests.size() < 1) {
 				tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
 			}
+			def pdbDirs = []
 			if(tests.size() > 0)
 			{
-				def pdbDirs = []
-				currentDir = new File(".")
-				currentDir.eachDirRecurse(){dir->
-					echo dir.path
-					if(dir.getPath() =~ /.*\\bin/)
-						pdbDirs << dir.path
-				}
 				stage('Tests') {
-					timestamps { 
+					timestamps {
 						String paths = ""
 						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
 						String resultsFileName = "xUnit.UnitTests.xml"
@@ -79,6 +73,16 @@ def call(body){
 							def test = tests[i]
 							paths += "\"$test.path\" "
 						}
+
+
+						currentDir = new File(pwd())
+						echo "currentDir is ${currentDir}"
+						currentDir.eachDirRecurse(){ dir->
+							echo dir.path
+							if(dir.getPath() =~ /.*\\bin/)
+								pdbDirs << dir.path
+						}
+
 						if(projectType == "NETCORE2") {
 							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 						}
