@@ -1,4 +1,5 @@
 #!groovy
+import groovy.io.FileType
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
@@ -49,6 +50,11 @@ def call(body){
 			}
 			if(tests.size() > 0)
 			{
+				def pdbDirs = []
+				currentDir = new File("${env.WORKSPACE}")
+				currentDir.eachFileMatch (FileType.DIRECTORIES, /.*\\bin /){
+					pdbDirs << it.path
+				}
 				stage('Tests') {
 					timestamps { 
 						String paths = ""
@@ -76,7 +82,7 @@ def call(body){
 						}
 						else {
 
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${env.WORKSPACE}\\VirtoCommerce.Platform.Web\\bin\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs.join(';')}\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
 							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
