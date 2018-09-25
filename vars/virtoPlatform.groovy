@@ -35,7 +35,7 @@ def call(body){
 				timestamps {
 					if(projectType == "NETCORE2") { //storefront
 						Packaging.startAnalyzer(this)
-						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m"
+						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m /p:DebugType=Full"
 					}
 					else  { //platform
 						bat "nuget restore ${solution}"
