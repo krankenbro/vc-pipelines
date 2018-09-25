@@ -51,7 +51,7 @@ def call(body){
 			if(tests.size() > 0)
 			{
 				def pdbDirs = []
-				currentDir = new File("${env.WORKSPACE}")
+				currentDir = new File(".")
 				currentDir.eachDirRecurse(){dir->
 					echo dir.path
 					if(dir.getPath() =~ /.*\\bin/)
