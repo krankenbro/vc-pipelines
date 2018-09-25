@@ -76,7 +76,7 @@ def call(body){
 						}
 						else {
 
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${env.WORKSPACE}\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${env.WORKSPACE}\\VirtoCommerce.Platform.Web\\bin\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
 							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
