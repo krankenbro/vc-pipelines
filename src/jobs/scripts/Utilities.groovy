@@ -318,6 +318,17 @@ class Utilities {
     }
 
     @NonCPS
+    def static getPDBDirs(context){
+        def pdbDirs = []
+        currentDir = new File(context.pwd())
+        currentDir.eachDirRecurse(){ dir->
+            if(dir.getPath() =~ /.*\\bin/)
+                pdbDirs << dir.path
+        }
+        return pdbDirs
+    }
+
+    @NonCPS
     def static jsonParse(def json) {
         new groovy.json.JsonSlurperClassic().parseText(json)
     }    

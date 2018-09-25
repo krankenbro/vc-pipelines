@@ -48,7 +48,6 @@ def call(body){
 			if(projectType == "NETCORE2" && tests.size() < 1) {
 				tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
 			}
-			def pdbDirs = []
 			if(tests.size() > 0)
 			{
 				stage('Tests') {
@@ -75,20 +74,12 @@ def call(body){
 						}
 
 
-						currentDir = new File(pwd())
-						echo "currentDir is ${currentDir}"
-						currentDir.eachDirRecurse(){ dir->
-							echo dir.path
-							if(dir.getPath() =~ /.*\\bin/)
-								pdbDirs << dir.path
-						}
-
 						if(projectType == "NETCORE2") {
 							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
 						}
 						else {
-
-							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs.join(';')}\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
+							def pdbDirs = Utilities.getPDBDirs(this).join(';')
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs}\" -register:user -oldStyle -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=ci)\""//${traits}\""
 							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
