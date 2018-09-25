@@ -327,6 +327,9 @@ class Utilities {
         }
         return pdbDirs
     }
+    def static getPDBDirsStr(context){
+        return getPDBDirs(context).join(';')
+    }
 
     @NonCPS
     def static jsonParse(def json) {
