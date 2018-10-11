@@ -3,7 +3,6 @@ import groovy.io.FileType
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
-import org.codehaus.groovy.tools.Utilities
 
 
 def call(body){
