@@ -306,11 +306,11 @@ class Utilities {
     def static getFailedStageName(logText){
         def res = logText =~ /\{\s+\((.+)\)/
         def name = ''
-        if(res.groupCount() < 1){
-            name = 'Not Found'
-        }
-        else {
+        try {
             name = res.group(1)
+        }
+        catch(IllegalStateException ex){
+            name = 'Not found'
         }
         return name
     }
