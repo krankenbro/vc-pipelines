@@ -294,7 +294,7 @@ class Utilities {
         def startIndex = 30
         def i = 1
         for(logRow in logArray.reverse()){
-            if(logRow =~ /\{\s+\(.*\)/) {
+            if(logRow =~ /\{\s\(.*\)/) {
                 startIndex = i
                 break
             }
@@ -304,7 +304,7 @@ class Utilities {
         return result
     }
     def static getFailedStageName(logText){
-        def res = logText =~ /\{\s+\((.+)\)/
+        def res = logText =~ /(?m)\{\s\((.+)\)/
         def name = ''
         try {
             name = res.group(1)
