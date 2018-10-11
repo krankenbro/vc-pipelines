@@ -294,7 +294,7 @@ class Utilities {
         def startIndex = 30
         def i = 1
         for(logRow in logArray.reverse()){
-            if(logRow =~ /\{\s\(.*\)/) {
+            if(logRow =~ /\{\s+\(.*\)/) {
                 startIndex = i
                 break
             }
@@ -310,7 +310,7 @@ class Utilities {
             name = 'Not Found'
         }
         else {
-            name = res.group(0)
+            name = res.group(1)
         }
         return name
     }
