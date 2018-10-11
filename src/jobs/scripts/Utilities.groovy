@@ -317,6 +317,19 @@ class Utilities {
         return swagger
     }
 
+    def static getWebApiDll(context){
+        String swagPaths = ""
+        def swagDlls = context.findFiles(glob: "**\\bin\\*.Web.dll")
+        if(swagDlls.size() > 0)
+        {
+            for(swagDll in swagDlls){
+                if(!swagDll.path.contains("VirtoCommerce.Platform.Core.Web.dll"))
+                    swagPaths += "\"$swagDll.path\""
+            }
+        }
+        return swagPaths
+    }
+
     @NonCPS
     def static getPDBDirs(context){
         def pdbDirs = []

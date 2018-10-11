@@ -36,7 +36,7 @@ def call(body) {
 						for (int i = 0; i < solutions.size(); i++)
 						{
 							def solution = solutions[i]
-							bat "Nuget restore ${solution}"
+							bat "${env.NUGET}\\nuget restore ${solution}"
 							bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 						}
 					}

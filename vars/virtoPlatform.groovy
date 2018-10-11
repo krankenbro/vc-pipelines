@@ -15,7 +15,6 @@ def call(body){
 	body()
 	solution = config.solution
 	projectType = config.projectType
-	def swaggerTargetPlatformDll = 'VirtoCommerce.Platform.Web.dll'
 	node () {
 		if(solution == null) {
 			solution = "VirtoCommerce.Platform.sln"
@@ -38,7 +37,7 @@ def call(body){
 						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:restore /t:rebuild /m /p:DebugType=Full"
 					}
 					else  { //platform
-						bat "nuget restore ${solution}"
+						bat "${env.NUGET}\\nuget restore ${solution}"
 						Packaging.startAnalyzer(this)
 						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 					}
@@ -102,6 +101,7 @@ def call(body){
 			if(projectType == 'NET4') {
 				stage('Swagger Validation') {
 					timestamps {
+						String swaggerTargetPlatformDll = 'VirtoCommerce.Platform.Web.dll'
 						String swagPaths = ""
 						def swagDlls = findFiles(glob: "VirtoCommerce.Platform.Web\\bin\\${swaggerTargetPlatformDll}")
 						if(swagDlls.size() > 0)
