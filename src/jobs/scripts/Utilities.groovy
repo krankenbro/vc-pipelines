@@ -306,7 +306,7 @@ class Utilities {
     def static getFailedStageName(logText){
         def res = logText =~ /\{\s+\((.+)\)/
         def name = ''
-        if(res.groupCount() < 2){
+        if(res.groupCount() < 1){
             name = 'Not Found'
         }
         else {
