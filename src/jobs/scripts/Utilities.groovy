@@ -2,7 +2,7 @@ package jobs.scripts;
 
 class Utilities {
 
-    private static String DefaultSharedLibName = 'virto-shared-library'
+    private static String DefaultSharedLibName = 'vc-pipeline'
     private static String DefaultAdminDockerPrefix = 'http://ci.virtocommerce.com'
     private static Integer DefaultPlatformPort = 8090
     private static Integer DefaultStorefrontPort = 8080
