@@ -310,7 +310,7 @@ class Utilities {
             name = 'Not Found'
         }
         else {
-            name = res.group(1)
+            name = res.group(0)
         }
         return name
     }
