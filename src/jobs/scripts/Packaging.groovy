@@ -6,7 +6,7 @@ class Packaging {
     private static String DefaultBranchOrCommitPush = '*/master'
     private static String DefaultRefSpec = '+refs/pull/*:refs/remotes/origin/pr/*'
     private static String DefaultMSBuild = 'MSBuild 15.0'
-    private static String DefaultSharedLibName = 'virto-shared-library'
+    private static String DefaultSharedLibName = 'vc-pipeline'
 
     /*
     private def Context;

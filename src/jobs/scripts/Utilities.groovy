@@ -300,7 +300,7 @@ class Utilities {
             }
             ++i
         }
-        def result = logArray[logArray.size() - startIndex..-1].join("\n")
+        def result = logArray[logArray.size() - startIndex..-1].join("\r\n")
         return result
     }
     def static getFailedStageName(logText){
