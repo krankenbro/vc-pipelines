@@ -304,14 +304,12 @@ class Utilities {
         return result
     }
     def static getFailedStageName(logText){
-        def res = logText =~ /(?m)\{\s\((.+)\)/
+        def res = logText =~/(?ms).*\{\s\((.*)\).*/
         def name = ''
-        try {
+        if(res.matches())
             name = res.group(1)
-        }
-        catch(IllegalStateException ex){
+        else
             name = 'Not found'
-        }
         return name
     }
     def static getMailBody(context, stageName, stageLog) {
