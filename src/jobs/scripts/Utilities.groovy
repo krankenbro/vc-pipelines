@@ -293,13 +293,6 @@ class Utilities {
     def static getFailedStage(logArray) {
         def log = logArray
         def startIndex = 15 //15 last lines of log by default
-//        log.reverse().eachWithIndex {
-//            logRow, index ->
-//                if(logRow =~ /\{\s\(.*\)/){
-//                    startIndex = index + 1
-//                    return true
-//                }
-//        }
         def i = 1
         for(logRow in log.reverse()){
             if(logRow =~ /\{\s\(.*\)/) {
@@ -309,6 +302,36 @@ class Utilities {
             ++i
         }
         def result = logArray[logArray.size() - startIndex..-1].join("\n")
+        return result
+    }
+
+    def static getFailedStageStr(logArray) {
+        def log = logArray
+        def startIndex = 30
+        def i = 1
+        for(logRow in log.reverse()){
+            if(logRow =~ /\{\s\(.*\)/) {
+                startIndex = i
+                break
+            }
+            ++i
+        }
+        def result = logArray[logArray.size() - startIndex..-1].join("\n")
+        return result
+    }
+    def static getFailedStageName(logText){
+        def res = logText =~ /\{\s+\((.+)\)/
+        def name = ''
+        if(res.groupCount() < 2){
+            name = 'Not Found'
+        }
+        else {
+            name = res.group(1)
+        }
+        return name
+    }
+    def static getMailBody(context, stageName, stageLog) {
+        def result = "Failed Stage: ${stageName}\n${context.env.JOB_URL}\n\n\n${stageLog}"
         return result
     }
 
