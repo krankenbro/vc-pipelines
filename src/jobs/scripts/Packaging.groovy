@@ -37,7 +37,7 @@ class Packaging {
 		    dockerFolder = "docker"
         }
         context.echo "Building docker image \"${dockerImageName}\" using \"${dockerContextFolder}\" as context folder"
-        context.bat "copy \"..\\workspace@libs\\${DefaultSharedLibName}\\resources\\${dockerFolder}\\${dockerFileFolder}\\Dockerfile\" \"${dockerContextFolder}\" /Y"
+        context.bat "copy \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\${dockerFolder}\\${dockerFileFolder}\\Dockerfile\" \"${dockerContextFolder}\" /Y"
         def dockerImage
         context.dir(dockerContextFolder)
         {
@@ -121,14 +121,12 @@ class Packaging {
 
     def static createSampleData(context)
     {
-    	def wsFolder = context.pwd()
- 	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-sampledata.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
+ 	    context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-sampledata.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
     }
 
     def static installModules(context)
     {
-    	def wsFolder = context.pwd()
- 	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
+ 	    context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
     }    
 
     def static pushDockerImage(context, dockerImage, String dockerTag)
@@ -353,7 +351,7 @@ class Packaging {
 	def static installModule(context, path)
 	{
 		def wsFolder = context.pwd()
- 		context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-module.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -moduleZipArchievePath \"${path}\" -ErrorAction Stop"
+ 		context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-module.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -moduleZipArchievePath \"${path}\" -ErrorAction Stop"
 	}    
 
 	def static publishThemePackage(context)
