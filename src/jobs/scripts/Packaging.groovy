@@ -8,14 +8,6 @@ class Packaging {
     private static String DefaultMSBuild = 'MSBuild 15.0'
     private static String DefaultSharedLibName = 'vc-pipeline'
 
-    /*
-    private def Context;
-
-    Packaging(script) {
-        Context = script;
-    }
-    */
-
     /**
      * Creates new docker image
      *
@@ -350,7 +342,6 @@ class Packaging {
 
 	def static installModule(context, path)
 	{
-		def wsFolder = context.pwd()
  		context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-module.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -moduleZipArchievePath \"${path}\" -ErrorAction Stop"
 	}    
 
