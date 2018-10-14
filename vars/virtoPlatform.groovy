@@ -94,7 +94,7 @@ def call(body){
 			// No need to occupy a node
 			stage("Quality Gate"){
 				timestamps {
-					Packaging.checkAnalyzerGate(this)
+					//Packaging.checkAnalyzerGate(this)
 				}
 			}
 
@@ -116,6 +116,8 @@ def call(body){
 				}
 			}
 
+			def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
+			def version = Utilities.getAssemblyVersion(this, webProject)
 			stage('Package') {
 				timestamps {
 					Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
