@@ -116,6 +116,10 @@ def call(body){
 				}
 			}
 
+			def dockerTag = env.BRANCH_NAME
+			if (env.BRANCH_NAME == 'master') {
+				dockerTag = "latest"
+			}
 			def zipArtifact = 'VirtoCommerce.Platform'
 			def websiteDir = 'VirtoCommerce.Platform.Web'
 			def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
