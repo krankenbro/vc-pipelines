@@ -148,7 +148,7 @@ class Packaging {
         }
         else
         {
-            context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
+            context.bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
         }
 
         def ant = new AntBuilder()
