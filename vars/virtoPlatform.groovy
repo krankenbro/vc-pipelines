@@ -116,41 +116,50 @@ def call(body){
 				}
 			}
 
-			stage('Docker Image Building'){
-				timestamps{
-					dockerTag = env.BRANCH_NAME
-					def composeFolder = Utilities.getComposeFolder(this)
-					dir(composeFolder)
-					{
-						def platformPort = Utilities.getPlatformPort(this)
-						def storefrontPort = Utilities.getStorefrontPort(this)
-						def sqlPort = Utilities.getSqlPort(this)
-
-						echo "DOCKER_PLATFORM_PORT=${platformPort}"
-						// 1. stop containers
-						// 2. remove instances including database
-						// 3. start up new containers
-						withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
-							bat "docker-compose stop"
-							bat "docker-compose rm -f -v"
-							bat "docker-compose up -d"
-						}
-
-						// 4. check if all docker containers are running
-						if(false && !Packaging.checkAllDockerTestEnvironments(this)) {
-							// 5. try running it again
-							withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
-								bat "docker-compose up -d"
-							}
-
-							// 6. check one more time
-							if(!Packaging.checkAllDockerTestEnvironments(this)) {
-								throw new Exception("can't start one or more docker containers");
-							}
-						}
-					}
+			stage('Package') {
+				timestamps {
+					Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
+					def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
+					dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
 				}
 			}
+
+//			stage('Docker Image Building'){
+//				timestamps{
+//					dockerTag = env.BRANCH_NAME
+//					def composeFolder = Utilities.getComposeFolder(this)
+//					dir(composeFolder)
+//					{
+//						def platformPort = Utilities.getPlatformPort(this)
+//						def storefrontPort = Utilities.getStorefrontPort(this)
+//						def sqlPort = Utilities.getSqlPort(this)
+//
+//						echo "DOCKER_PLATFORM_PORT=${platformPort}"
+//						// 1. stop containers
+//						// 2. remove instances including database
+//						// 3. start up new containers
+//						withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
+//							bat "docker-compose stop"
+//							bat "docker-compose rm -f -v"
+//							bat "docker-compose up -d"
+//						}
+//
+//						// 4. check if all docker containers are running
+//						if(false && !Packaging.checkAllDockerTestEnvironments(this)) {
+//							// 5. try running it again
+//							withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
+//								bat "docker-compose up -d"
+//							}
+//
+//							// 6. check one more time
+//							if(!Packaging.checkAllDockerTestEnvironments(this)) {
+//								throw new Exception("can't start one or more docker containers");
+//							}
+//						}
+//					}
+//
+//				}
+//			}
 		}
 		catch(Throwable e) {
 			currentBuild.result = 'FAILURE'
