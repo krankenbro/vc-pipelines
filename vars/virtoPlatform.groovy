@@ -116,6 +116,8 @@ def call(body){
 				}
 			}
 
+			def zipArtifact = 'VirtoCommerce.Platform'
+			def websiteDir = 'VirtoCommerce.Platform.Web'
 			def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
 			def version = Utilities.getAssemblyVersion(this, webProject)
 			stage('Package') {
