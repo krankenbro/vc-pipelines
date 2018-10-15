@@ -279,6 +279,10 @@ class Utilities {
 		return stagingName
 	}
 
+    def static isNetCore(projectType){
+        return projectType == 'NETCORE2'
+    }
+
     def static sendMail(context, subject, body='', mailTo = null, mailFrom = null) {
         if(mailFrom == null){
             mailFrom = context.env.DefaultMailFrom
