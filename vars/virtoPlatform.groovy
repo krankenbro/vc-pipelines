@@ -116,21 +116,32 @@ def call(body){
 				}
 			}
 
-			def dockerTag = env.BRANCH_NAME
-			if (env.BRANCH_NAME == 'master') {
-				dockerTag = "latest"
-			}
-			def zipArtifact = 'VirtoCommerce.Platform'
-			def websiteDir = 'VirtoCommerce.Platform.Web'
-			def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
-			def version = Utilities.getAssemblyVersion(this, webProject)
-			stage('Package') {
-				timestamps {
-					Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
-					def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
-					dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
+			if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
+			{
+				def dockerTag = env.BRANCH_NAME
+				if (env.BRANCH_NAME == 'master') {
+					dockerTag = "latest"
+				}
+
+				def zipArtifact = 'VirtoCommerce.Platform'
+				def websiteDir = 'VirtoCommerce.Platform.Web'
+				def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
+				if(Utilities.isNetCore(projectType)){
+					websiteDir = 'VirtoCommerce.Storefront'
+					webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
+					zipArtifact = 'VirtoCommerce.StoreFront'
+				}
+
+				def version = Utilities.getAssemblyVersion(this, webProject)
+				stage('Package') {
+					timestamps {
+						Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
+						def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
+						dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
+					}
 				}
 			}
+
 
 //			stage('Docker Image Building'){
 //				timestamps{
