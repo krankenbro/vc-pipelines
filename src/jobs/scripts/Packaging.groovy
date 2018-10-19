@@ -199,7 +199,7 @@ class Packaging {
 
     def static cleanBuild(context, solution)
     {
-        context.bat "\"${context.tool DefaultMSBuild}\" \"${solution}\" /t:clean /p:Configuration=Debug /p:Platform=\"Any CPU\" /m"
+        context.bat "\"${context.tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /t:clean /p:Configuration=Debug /p:Platform=\"Any CPU\" /m"
     }    
 
     def static startAnalyzer(context)
