@@ -124,6 +124,10 @@ def call(body) {
 				if (env.BRANCH_NAME == 'master') {
 					dockerTag = "latest"
 				}
+				stage('Build platform and storefront') {
+					build("../vc-platform/${dockerTag}")
+					build("../vc-storefront-core/${dockerTag}")
+				}
 				stage('Prepare Test Environment') {
 					timestamps {
 						// Start docker environment
