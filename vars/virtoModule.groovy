@@ -94,6 +94,12 @@ def call(body) {
 					Packaging.checkAnalyzerGate(this)
 				}
 			}
+			stage('Package Module')
+			{
+				timestamps {
+					processManifests(false) // prepare artifacts for testing
+				}
+			}
 
 			stage('Swagger Validation') {
 				timestamps {
@@ -358,7 +364,7 @@ def processManifest(def publish, def manifestPath)
 	echo "prepare release $manifestDirectory"
 	Modules.createModuleArtifact(this, manifestDirectory)
 
-	if (publish) {
+	if (false && publish) {
 		packageUrl = Packaging.publishRelease(this, version, releaseNotes)
 
 		updateModule(

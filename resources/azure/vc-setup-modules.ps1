@@ -79,6 +79,7 @@ Param(
             Write-Output "Restarting website"
             $moduleState = Invoke-RestMethod "$modulesRestartUrl" -Method Post -ContentType "application/json" -Headers $headers
             Write-Output $moduleState                  
+            Write-Output $moduleState
       }
       catch
       {
