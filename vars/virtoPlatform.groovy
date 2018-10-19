@@ -143,7 +143,7 @@ def call(body){
 			}
 
 
-//			stage('Docker Image Building'){
+//			stage('Docker Environment'){
 //				timestamps{
 //					dockerTag = env.BRANCH_NAME
 //					def composeFolder = Utilities.getComposeFolder(this)

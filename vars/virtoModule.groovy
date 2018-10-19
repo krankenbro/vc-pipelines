@@ -110,6 +110,30 @@ def call(body) {
 					bat "swagger-cli validate ${env.WORKSPACE}\\swagger.json"
 				}
 			}
+
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+				stage('Prepare Test Environment') {
+					timestamps {
+						// Start docker environment
+						Packaging.startDockerTestEnvironment(this, dockerTag)
+
+						// install modules
+						Packaging.installModules(this)
+
+						// now create sample data
+						Packaging.createSampleData(this)
+
+						// install module
+						Modules.installModuleArtifacts(this)
+					}
+				}
+			}
+
+			stage('Cleanup') {
+				timestamps {
+					Packaging.cleanSolutions(this)
+				}
+			}
 		}
 		catch(Throwable e) {
 			currentBuild.result = 'FAILURE'
