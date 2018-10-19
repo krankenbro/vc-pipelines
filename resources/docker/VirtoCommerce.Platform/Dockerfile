@@ -1,7 +1,6 @@
 # escape=`
 
 FROM microsoft/aspnet:4.6.2
-MAINTAINER Alexander Siniouguine <support@virtocommerce.com>
 
 ARG SOURCE=VirtoCommerce.Platform
 

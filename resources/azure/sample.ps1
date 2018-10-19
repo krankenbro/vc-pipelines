@@ -3,8 +3,8 @@
 Write-Output $PSScriptRoot
 
 $apiurl = 'http://localhost/admin'
-$apiurl = 'http://ci.virtocommerce.com:8090'
-$apiurl = 'http://192.168.1.107:8090'
+$apiurl = 'http://localhost:8090'
+$apiurl = 'http://localhost:8090'
 #$apiurl = 'http://glassbox/admin'
 $notificationId = "7a4284ed-9002-4bb6-80c8-c7ad59656acb"
 $appId = '27e0d789f12641049bd0e939185b4fd2'

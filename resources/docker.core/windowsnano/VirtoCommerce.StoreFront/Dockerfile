@@ -1,7 +1,6 @@
 # escape=`
 
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
-MAINTAINER Alexander Siniouguine <support@virtocommerce.com>
 
 ARG SOURCE=VirtoCommerce.Storefront
 
