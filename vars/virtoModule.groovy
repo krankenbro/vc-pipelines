@@ -112,6 +112,12 @@ def call(body) {
 			}
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+				def dockerTag = env.BRANCH_NAME
+				def buildOrder = Utilities.getNextBuildOrder(this)
+				projectType = config.projectType
+				if (env.BRANCH_NAME == 'master') {
+					dockerTag = "latest"
+				}
 				stage('Prepare Test Environment') {
 					timestamps {
 						// Start docker environment
