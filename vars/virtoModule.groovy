@@ -2,6 +2,7 @@
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
+import org.codehaus.groovy.tools.Utilities
 
 def call(body) {
 
@@ -141,6 +142,13 @@ def call(body) {
 
 						// install module
 						Modules.installModuleArtifacts(this)
+
+                        //check installed modules
+                        def platformHost = Utilities.getPlatformHost(this)
+                        def platformPort = Utilities.getPlatformPort(this)
+                        def response = httpRequest url: "${platformHost:platformPort}/api/platform/modules", httpMode: 'GET', responseHandle: 'NONE'
+                        println("Response status: ${response.status}")
+                        println("response content: ${response.content}")
 					}
 				}
 			}
