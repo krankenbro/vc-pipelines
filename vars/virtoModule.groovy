@@ -145,11 +145,12 @@ def call(body) {
 						Modules.installModuleArtifacts(this)
 
                         //check installed modules
-                        def platformHost = Utilities.getPlatformHost(this)
-                        def platformPort = Utilities.getPlatformPort(this)
-                        def response = httpRequest url: "${platformHost}/api/platform/modules", httpMode: 'GET', responseHandle: 'NONE'
-                        println("Response status: ${response.status}")
-                        println("response content: ${response.content}")
+//                        def platformHost = Utilities.getPlatformHost(this)
+//                        def platformPort = Utilities.getPlatformPort(this)
+//                        def response = httpRequest url: "${platformHost}/api/platform/modules", httpMode: 'GET', responseHandle: 'NONE'
+//                        println("Response status: ${response.status}")
+//                        println("response content: ${response.content}")
+						Packaging.checkInstalledModules(this)
 					}
 				}
 			}

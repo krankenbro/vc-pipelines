@@ -119,7 +119,11 @@ class Packaging {
     def static installModules(context)
     {
  	    context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
-    }    
+    }
+
+    def static checkInstalledModules(context){
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\check-installed-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
+    }
 
     def static pushDockerImage(context, dockerImage, String dockerTag)
     {
