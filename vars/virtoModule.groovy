@@ -147,7 +147,7 @@ def call(body) {
                         //check installed modules
                         def platformHost = Utilities.getPlatformHost(this)
                         def platformPort = Utilities.getPlatformPort(this)
-                        def response = httpRequest url: "${platformHost:platformPort}/api/platform/modules", httpMode: 'GET', responseHandle: 'NONE'
+                        def response = httpRequest url: "${platformHost}:${platformPort}/api/platform/modules", httpMode: 'GET', responseHandle: 'NONE'
                         println("Response status: ${response.status}")
                         println("response content: ${response.content}")
 					}
