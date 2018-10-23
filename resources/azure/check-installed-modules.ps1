@@ -24,4 +24,6 @@ $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
-Write-Output $modules
+Foreach($module in $modules){
+    Write-Output $module.validationErrors
+}
