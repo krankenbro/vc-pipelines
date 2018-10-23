@@ -125,8 +125,10 @@ def call(body) {
 					dockerTag = "latest"
 				}
 				stage('Build platform and storefront') {
-					build("../vc-platform/${dockerTag}")
-					build("../vc-storefront-core/${dockerTag}")
+                    timestamps{
+                        //build("../vc-platform/${dockerTag}")
+                        //build("../vc-storefront-core/${dockerTag}")
+                    }
 				}
 				stage('Prepare Test Environment') {
 					timestamps {
