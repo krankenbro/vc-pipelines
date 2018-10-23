@@ -22,6 +22,7 @@ def call(body){
 		if(projectType == null) {
 			projectType = "NET4"
 		}
+		def dockerTag = env.BRANCH_NAME
 
 		try {
 			stage ('Checkout') {
@@ -118,7 +119,6 @@ def call(body){
 
 			if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
 			{
-				def dockerTag = env.BRANCH_NAME
 				if (env.BRANCH_NAME == 'master') {
 					dockerTag = "latest"
 				}
@@ -189,9 +189,7 @@ def call(body){
 			throw e
 		}
 		finally {
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				Packaging.stopDockerTestEnvironment(this, dockerTag)
-			}
+			Packaging.stopDockerTestEnvironment(this, dockerTag)
 			if(currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
 			}

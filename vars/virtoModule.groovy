@@ -11,9 +11,9 @@ def call(body) {
     body.delegate = config
     body()
 	projectType = config.projectType
-
     node
     {
+		def dockerTag = env.BRANCH_NAME
 		
 		if(projectType == null) {
 			projectType = "NET4"
@@ -118,7 +118,6 @@ def call(body) {
 			}
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				def dockerTag = env.BRANCH_NAME
 				def buildOrder = Utilities.getNextBuildOrder(this)
 				projectType = config.projectType
 				if (env.BRANCH_NAME == 'master') {
@@ -170,9 +169,7 @@ def call(body) {
 			throw e
 		}
 		finally {
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				Packaging.stopDockerTestEnvironment(this, dockerTag)
-			}
+			Packaging.stopDockerTestEnvironment(this, dockerTag)
 			if(currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
 			}
@@ -180,7 +177,7 @@ def call(body) {
 	}
 }
 
-    def hard(body) {
+def hard(body) {
 
     // evaluate the body block, and collect configuration into the object
     def config = [:]
