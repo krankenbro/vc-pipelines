@@ -25,6 +25,9 @@ $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $modules = Invoke-WebRequest $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop | ConvertFrom-Json
 Write-Output "check modules request done"
+Write-Output $modules
+Write-Output "end of raw data"
+Write-Output $modules.GetType().Fullname
 Foreach($module in $modules.content)
 {
     Write-Output $module.validationErrors
