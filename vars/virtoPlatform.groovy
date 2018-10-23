@@ -189,6 +189,9 @@ def call(body){
 			throw e
 		}
 		finally {
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+				Packaging.stopDockerTestEnvironment(this, dockerTag)
+			}
 			if(currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
 			}
