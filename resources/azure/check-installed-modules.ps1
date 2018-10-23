@@ -28,7 +28,7 @@ Write-Output "check modules request done"
 Write-Output $modules
 Write-Output "end of raw data"
 Write-Output $modules.GetType().Fullname
-Foreach($module in $modules)
+Foreach($module in $modules.content)
 {
     Write-Output $module.validationErrors
 }
