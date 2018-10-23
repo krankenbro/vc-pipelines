@@ -23,9 +23,8 @@ $checkModulesUrl = "$apiurl/api/platform/modules"
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
-$modulesJSON = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
+$modules = Invoke-WebRequest $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop | ConvertFrom-Json
 Write-Output "check modules request done"
-$modules = ConvertFrom-Json $modulesJSON
 Foreach($module in $modules)
 {
     Write-Output $module.validationErrors
