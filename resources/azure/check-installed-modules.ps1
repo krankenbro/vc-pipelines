@@ -25,13 +25,11 @@ $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
 Write-Output "check modules request done"
-Write-Output $modules
-Write-Output "end of raw data"
 Write-Output $modules.GetType().Fullname
 $i = 1
 Foreach($module in $modules)
 {
     Write-Output $i
-    Write-Output $module.validationErrors
+    Write-Output $module
     $i++
 }
