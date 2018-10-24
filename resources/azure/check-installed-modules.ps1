@@ -31,5 +31,7 @@ Foreach($module in $modules)
 {
     Write-Output $i
     Write-Output $module
+    Write-Output "___"
+    Write-Output $module.GetType().Fullname
     $i++
 }
