@@ -125,6 +125,10 @@ class Packaging {
         context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\check-installed-modules.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
     }
 
+    def static createSwaggerSchema(context, swaggerFile) {
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\get-swagger.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -swaggerFile \"${swaggerFile}\" -ErrorAction Stop"
+    }
+
     def static pushDockerImage(context, dockerImage, String dockerTag)
     {
 		context.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {

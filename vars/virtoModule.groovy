@@ -101,21 +101,6 @@ def call(body) {
 				}
 			}
 
-			stage('Swagger Validation') {
-				timestamps {
-					String swagPaths = ""
-					def swagDlls = findFiles(glob: "**\\bin\\*.Web.dll")
-					if(swagDlls.size() > 0)
-					{
-						for(swagDll in swagDlls){
-							if(!swagDll.path.contains("VirtoCommerce.Platform.Core.Web.dll"))
-								swagPaths += "\"$swagDll.path\""
-						}
-					}
-					bat "nswag webapi2swagger /assembly:${swagPaths} /output:${env.WORKSPACE}\\swagger.json"
-					bat "swagger-cli validate ${env.WORKSPACE}\\swagger.json"
-				}
-			}
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
 				def buildOrder = Utilities.getNextBuildOrder(this)
@@ -152,7 +137,17 @@ def call(body) {
 						Packaging.checkInstalledModules(this)
 					}
 				}
+
+				stage('Swagger Validation') {
+					timestamps {
+						def swaggerFile = "${env.WORKSPACE}\\swagger.json"
+						Packaging.createSwaggerSchema(this, swaggerFile)
+						bat "swagger-cli validate ${swaggerFile}"
+					}
+				}
 			}
+
+
 
 			stage('Cleanup') {
 				timestamps {
