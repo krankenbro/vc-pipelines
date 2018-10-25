@@ -86,6 +86,9 @@ def call(body){
 					}
 				}
 			}
+            def zipArtifact = 'VirtoCommerce.Platform'
+            def websiteDir = 'VirtoCommerce.Platform.Web'
+            def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
 
             if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
             {
@@ -93,9 +96,6 @@ def call(body){
                     dockerTag = "latest"
                 }
 
-                def zipArtifact = 'VirtoCommerce.Platform'
-                def websiteDir = 'VirtoCommerce.Platform.Web'
-                def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
                 if(Utilities.isNetCore(projectType)){
                     websiteDir = 'VirtoCommerce.Storefront'
                     webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
