@@ -21,9 +21,9 @@ class Packaging {
     def static createDockerImage(context, String dockerImageName, String dockerContextFolder, String dockerSourcePath, String version) {
         def dockerFileFolder = dockerImageName.replaceAll("/", ".")
 		def dockerFolder = ""
-        if(context.projectType == 'NETCORE2') {
+        if(Utilities.isNetCore(context.projectType)) {
 		    dockerFolder = "docker.core\\windowsnano"
-			dockerImageName = dockerImageName + "-core"
+			dockerImageName = dockerImageName
         }
         else {
 		    dockerFolder = "docker"
@@ -105,7 +105,7 @@ class Packaging {
         context.dir(composeFolder)
         {
             context.withEnv(["DOCKER_TAG=${dockerTag}", "COMPOSE_PROJECT_NAME=${context.env.BUILD_TAG}"]) {
-                context.bat "docker-compose stop"
+                context.bat "docker-compose down -v"
                 context.bat "docker-compose rm -f -v"
             }
         }
