@@ -43,6 +43,13 @@ def call(body) {
 				}
 			}
 
+			stage('Package Module')
+			{
+				timestamps {
+					processManifests(false) // prepare artifacts for testing
+				}
+			}
+
 			def tests = Utilities.getTestDlls(this)
 			if(projectType == "NETCORE2" && tests.size() < 1) {
 				tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
@@ -92,12 +99,6 @@ def call(body) {
 			stage("Quality Gate"){
 				timestamps {
 					Packaging.checkAnalyzerGate(this)
-				}
-			}
-			stage('Package Module')
-			{
-				timestamps {
-					processManifests(false) // prepare artifacts for testing
 				}
 			}
 
