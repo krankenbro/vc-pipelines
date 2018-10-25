@@ -140,7 +140,8 @@ def call(body) {
 
 				stage('Swagger Validation') {
 					timestamps {
-						def swaggerFile = "${env.WORKSPACE}\\swagger.json"
+						def tempFolder = Utilities.getTempFolder(this)
+						def swaggerFile = "${tempFolder}\\swagger.json"
 						Packaging.createSwaggerSchema(this, swaggerFile)
 						bat "swagger-cli validate ${swaggerFile}"
 					}

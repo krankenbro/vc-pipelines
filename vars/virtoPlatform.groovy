@@ -3,6 +3,7 @@ import groovy.io.FileType
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
+import org.codehaus.groovy.tools.Utilities
 
 
 def call(body){
@@ -86,6 +87,16 @@ def call(body){
 					}
 				}
 			}
+
+            def version = Utilities.getAssemblyVersion(this, webProject)
+            stage('Package') {
+                timestamps {
+                    Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
+                    def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
+                    dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
+                }
+            }
+
 			stage('Submit Analyze') {
 				timestamps {
 					Packaging.endAnalyzer(this)
@@ -117,15 +128,17 @@ def call(body){
                 }
             }
 
-			if(projectType == 'NET4') {
-				stage('Swagger Validation') {
-					timestamps {
-                        def swaggerFile = "${env.WORKSPACE}\\swagger.json"
+            if(!Utilities.isNetCore(projectType) && (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master')){
+                stage('Swagger Validation') {
+                    timestamps {
+                        def tempFolder = Utilities.getTempFolder(this)
+                        def swaggerFile = "${tempFolder}\\swagger.json"
                         Packaging.createSwaggerSchema(this, swaggerFile)
-						bat "swagger-cli validate ${swaggerFile}"
-					}
-				}
-			}
+                        bat "swagger-cli validate ${swaggerFile}"
+                    }
+                }
+            }
+
 
 			if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
 			{
@@ -141,54 +154,7 @@ def call(body){
 					webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
 					zipArtifact = 'VirtoCommerce.StoreFront'
 				}
-
-				def version = Utilities.getAssemblyVersion(this, webProject)
-				stage('Package') {
-					timestamps {
-						Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
-						def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
-						dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
-					}
-				}
 			}
-
-
-//			stage('Docker Environment'){
-//				timestamps{
-//					dockerTag = env.BRANCH_NAME
-//					def composeFolder = Utilities.getComposeFolder(this)
-//					dir(composeFolder)
-//					{
-//						def platformPort = Utilities.getPlatformPort(this)
-//						def storefrontPort = Utilities.getStorefrontPort(this)
-//						def sqlPort = Utilities.getSqlPort(this)
-//
-//						echo "DOCKER_PLATFORM_PORT=${platformPort}"
-//						// 1. stop containers
-//						// 2. remove instances including database
-//						// 3. start up new containers
-//						withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
-//							bat "docker-compose stop"
-//							bat "docker-compose rm -f -v"
-//							bat "docker-compose up -d"
-//						}
-//
-//						// 4. check if all docker containers are running
-//						if(false && !Packaging.checkAllDockerTestEnvironments(this)) {
-//							// 5. try running it again
-//							withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${env.BUILD_TAG}" ]) {
-//								bat "docker-compose up -d"
-//							}
-//
-//							// 6. check one more time
-//							if(!Packaging.checkAllDockerTestEnvironments(this)) {
-//								throw new Exception("can't start one or more docker containers");
-//							}
-//						}
-//					}
-//
-//				}
-//			}
 		}
 		catch(Throwable e) {
 			currentBuild.result = 'FAILURE'
