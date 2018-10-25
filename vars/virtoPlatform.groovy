@@ -87,6 +87,22 @@ def call(body){
 				}
 			}
 
+            if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
+            {
+                if (env.BRANCH_NAME == 'master') {
+                    dockerTag = "latest"
+                }
+
+                def zipArtifact = 'VirtoCommerce.Platform'
+                def websiteDir = 'VirtoCommerce.Platform.Web'
+                def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
+                if(Utilities.isNetCore(projectType)){
+                    websiteDir = 'VirtoCommerce.Storefront'
+                    webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
+                    zipArtifact = 'VirtoCommerce.StoreFront'
+                }
+            }
+
             def version = Utilities.getAssemblyVersion(this, webProject)
             stage('Package') {
                 timestamps {
@@ -139,21 +155,7 @@ def call(body){
             }
 
 
-			if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev')
-			{
-				if (env.BRANCH_NAME == 'master') {
-					dockerTag = "latest"
-				}
 
-				def zipArtifact = 'VirtoCommerce.Platform'
-				def websiteDir = 'VirtoCommerce.Platform.Web'
-				def webProject = 'VirtoCommerce.Platform.Web\\VirtoCommerce.Platform.Web.csproj'
-				if(Utilities.isNetCore(projectType)){
-					websiteDir = 'VirtoCommerce.Storefront'
-					webProject = 'VirtoCommerce.Storefront\\VirtoCommerce.Storefront.csproj'
-					zipArtifact = 'VirtoCommerce.StoreFront'
-				}
-			}
 		}
 		catch(Throwable e) {
 			currentBuild.result = 'FAILURE'
