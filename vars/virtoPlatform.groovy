@@ -22,7 +22,7 @@ def call(body){
 		if(projectType == null) {
 			projectType = "NET4"
 		}
-		def dockerTag = env.BRANCH_NAME
+		def dockerTag = "${env.BRANCH_NAME}-branch"
 
 		try {
 			stage ('Checkout') {
