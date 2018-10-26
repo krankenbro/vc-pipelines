@@ -143,7 +143,7 @@ def call(body){
                 }
             }
 
-            if(!Utilities.isNetCore(projectType) && (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master')){
+            if(false && !Utilities.isNetCore(projectType) && (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master')){
                 stage('Swagger Validation') {
                     timestamps {
                         def tempFolder = Utilities.getTempFolder(this)
