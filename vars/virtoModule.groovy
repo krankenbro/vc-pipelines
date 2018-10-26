@@ -123,14 +123,14 @@ def call(body) {
 						// install modules
 						Packaging.installModules(this)
 
-						// now create sample data
-						Packaging.createSampleData(this)
-
 						// install module
 						Modules.installModuleArtifacts(this)
 
-                        //check installed modules
+						//check installed modules
 						Packaging.checkInstalledModules(this)
+
+						// now create sample data
+						Packaging.createSampleData(this)
 					}
 				}
 
