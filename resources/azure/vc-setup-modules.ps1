@@ -74,7 +74,7 @@ Param(
                   $cycleCount = $cycleCount + 1 
                   Start-Sleep -s 3
             }
-            while (!$abort -and $notificationState.finished -eq $null -and $cycleCount -lt 60) # stop processing after 3 min or when notifications had stopped $moduleState.NotifyEvents.Length -ne 0 -and 
+            while (!$abort -and $notificationState.finished -eq $null -and $cycleCount -lt 180) # stop processing after 3 min or when notifications had stopped $moduleState.NotifyEvents.Length -ne 0 -and
 
             Write-Output "Restarting website"
             $moduleState = Invoke-RestMethod "$modulesRestartUrl" -Method Post -ContentType "application/json" -Headers $headers
