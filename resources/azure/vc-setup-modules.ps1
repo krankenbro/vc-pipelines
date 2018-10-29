@@ -42,7 +42,7 @@ Param(
      $NotificationStateJson = @"
      {"Ids":["$notificationId"],"start":0, "count": 1}     
 "@
-          
+
      $cycleCount = 0
      $startIndex = 0
      $abort = $false
@@ -52,6 +52,7 @@ Param(
             {
                   # Retrieve notification state
                   $moduleState = Invoke-RestMethod "$modulesStateUrl" -Body $NotificationStateJson -Method Post -ContentType "application/json" -Headers $headers
+                  Start-Sleep -s 15
 
                   # display all statuses
                   if($moduleState.NotifyEvents -ne $null -and $moduleState.NotifyEvents.Length -ne 0)
