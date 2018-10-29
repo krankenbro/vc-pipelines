@@ -19,24 +19,25 @@ if ([string]::IsNullOrWhiteSpace($hmacSecret))
 
 $checkModulesUrl = "$apiurl/api/platform/modules"
 
-# Initiate sample data installation
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
-if($modules.Length -gt 0){
-    Write-Output "check modules request done"
-}
-else
+$installedModules = 0
+if($modules.Length -le 0)
 {
     Write-Output "No module's info returned"
     exit 1
 }
 Foreach($module in $modules)
 {
+    if($module.isInstalled){
+        $installedModules++
+    }
     if($module.validationErrors.Length -gt 0){
-        Write-Output $module.Name
+        Write-Output $module.id
         Write-Output $module.validationErrors
         exit 1
     }
 }
+Write-Output "Modules installed: $installedModules"
