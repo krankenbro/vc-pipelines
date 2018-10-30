@@ -180,7 +180,7 @@ def hard(body) {
     node
     {
 	    def deployScript = 'VC-Module2AzureDev.ps1'
-		def dockerTag = env.BRANCH_NAME
+		def dockerTag = "${env.BRANCH_NAME}-branch"
 		def buildOrder = Utilities.getNextBuildOrder(this)
 		projectType = config.projectType
 	    if (env.BRANCH_NAME == 'master') {
