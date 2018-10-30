@@ -21,13 +21,17 @@ Param(
 
      # Initialize paths used by the script
      $moduleInstallUrl = "$apiurl/api/platform/modules/localstorage"
+    $restartUrl = "$apiurl/api/platform/modules/restart"
 
      # Initiate modules installation
      $headerValue = Create-Authorization $hmacAppId $hmacSecret
      $headers = @{}
      $headers.Add("Authorization", $headerValue)
-     #Write-Output Invoke-RestMethod $moduleInstallUrl -Method Post -InFile $moduleZipArchievePath -Headers $headers -ContentType 'multipart/form-data' -ErrorAction Stop
-     #$moduleInstallResult = Invoke-RestMethod $moduleInstallUrl -Method Post -InFile $moduleZipArchievePath -ContentType 'multipart/form-data' -Headers $headers -ErrorAction Stop
+
      $moduleInstallResult = Invoke-MultipartFormDataUpload -InFile $moduleZipArchievePath -Uri $moduleInstallUrl -Authorization $headerValue
      Write-Output $moduleInstallResult
+    $moduleState = Invoke-RestMethod "$modulesRestartUrl" -Method Post -ContentType "application/json" -Headers $headers
+    Start-Sleep -s 5
+
+
 
