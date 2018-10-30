@@ -112,7 +112,7 @@ class Packaging {
 
     def static createSampleData(context)
     {
- 	    context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-setup-sampledata.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
+ 	    context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\setup-sampledata.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -ErrorAction Stop"
     }
 
     def static installModules(context)
