@@ -120,11 +120,11 @@ def call(body) {
 						// Start docker environment
 						Packaging.startDockerTestEnvironment(this, dockerTag)
 
+                        // install module
+                        Modules.installModuleArtifacts(this)
+
 						// install modules
 						Packaging.installModules(this)
-
-						// install module
-						Modules.installModuleArtifacts(this)
 
 						//check installed modules
 						Packaging.checkInstalledModules(this)
@@ -167,136 +167,6 @@ def call(body) {
 			}
 		}
 	}
-}
-
-def hard(body) {
-
-    // evaluate the body block, and collect configuration into the object
-    def config = [:]
-    body.resolveStrategy = Closure.DELEGATE_FIRST
-    body.delegate = config
-    body()
-
-    node
-    {
-	    def deployScript = 'VC-Module2AzureDev.ps1'
-		def dockerTag = "${env.BRANCH_NAME}-branch"
-		def buildOrder = Utilities.getNextBuildOrder(this)
-		projectType = config.projectType
-	    if (env.BRANCH_NAME == 'master') {
-			deployScript = 'VC-Module2AzureQA.ps1'
-			dockerTag = "latest"
-		}
-		try {	
-			step([$class: 'GitHubCommitStatusSetter', contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'ci.virtocommerce.com'], statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: 'Building on Virto Commerce CI', state: 'PENDING']]]])			
-			Utilities.notifyBuildStatus(this, "started")
-
-			stage('Checkout') {
-				timestamps { 		
-					checkout scm
-				}				
-			}			
-
-			if(Utilities.checkAndAbortBuild(this))
-			{
-				return true
-			}
-
-			stage('Build + Analyze')
-			{
-				timestamps { 
-					// clean folder for a release
-					if (Packaging.getShouldPublish(this)) {
-						deleteDir()
-						checkout scm
-					}							
-					Packaging.startAnalyzer(this)
-					Packaging.buildSolutions(this)
-				}
-			}
-
-			stage('Package Module')
-			{
-				timestamps { 				
-					processManifests(false) // prepare artifacts for testing
-				}
-			}
-
-			stage('Unit Tests')
-			{
-				timestamps { 				
-					Modules.runUnitTests(this)
-				}
-			}
-
-			stage('Submit Analysis') {
-				timestamps { 
-					Packaging.endAnalyzer(this)
-				}
-			}
-
-			// No need to occupy a node
-			stage("Quality Gate"){
-				Packaging.checkAnalyzerGate(this)
-			}		
-
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				stage('Prepare Test Environment') {
-					timestamps { 
-						// Start docker environment				
-						Packaging.startDockerTestEnvironment(this, dockerTag)
-				        
-						// install modules
-						Packaging.installModules(this)
-
-						// now create sample data
-        				Packaging.createSampleData(this)
-
-						// install module
-						Modules.installModuleArtifacts(this)
-					}
-				}
-
-				stage('Integration Tests')
-				{
-					timestamps { 					
-						Modules.runIntegrationTests(this)
-					}
-				}				
-			}				
-
-			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-				stage('Publish')
-				{
-					timestamps { 	
-						Utilities.runSharedPS(this, "resources\\azure\\${deployScript}")				
-						if (Packaging.getShouldPublish(this)) {
-							processManifests(true) // publish artifacts to github releases
-						}
-					}
-				}
-			}		
-
-			stage('Cleanup') {
-				timestamps { 
-					Packaging.cleanSolutions(this)
-				}
-			}				
-		}
-		catch (any) {
-			currentBuild.result = 'FAILURE'
-			Utilities.notifyBuildStatus(this, currentBuild.result)
-			throw any //rethrow exception to prevent the build from proceeding
-		}
-		finally {
-			Packaging.stopDockerTestEnvironment(this, dockerTag)
-			step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
-			//step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@virtoway.com', sendToIndividuals: true])
-		}
-
-		step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
-		Utilities.notifyBuildStatus(this, currentBuild.result)
-    }
 }
 
 def processManifests(publish)
