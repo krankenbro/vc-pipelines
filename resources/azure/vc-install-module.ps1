@@ -32,7 +32,7 @@ Param(
 
      $moduleUploadResult = Invoke-MultipartFormDataUpload -InFile $moduleZipArchievePath -Uri $moduleUploadUrl -Authorization $headerValue
      Write-Output $moduleUploadResult
-    $moduleInstallResult = Invoke-RestMethod -Uri $moduleInstallUrl -Method Post -Authorization $headerValue -Body $moduleUploadResult
+    $moduleInstallResult = Invoke-RestMethod -Uri $moduleInstallUrl -Method Post -Headers $headers -Body $moduleUploadResult
     Write-Output $moduleInstallResult
     #$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
     Start-Sleep -s 5
