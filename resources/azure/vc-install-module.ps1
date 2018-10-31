@@ -25,6 +25,9 @@ Param(
      #$restartUrl = "$apiurl/api/platform/modules/restart"
 
 
+    $moduleZipArchievePath = "D:/VirtoCommerce.CatalogPublishing_1.1.3.zip"
+
+
      # Initiate modules installation
      $headerValue = Create-Authorization $hmacAppId $hmacSecret
      $headers = @{}
