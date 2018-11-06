@@ -22,11 +22,6 @@ Param(
      # Initialize paths used by the script
      $moduleUploadUrl = "$apiurl/api/platform/modules/localstorage"
     $moduleInstallUrl = "$apiurl/api/platform/modules/install"
-     #$restartUrl = "$apiurl/api/platform/modules/restart"
-
-
-    $moduleZipArchievePath = "D:/VirtoCommerce.CatalogPublishing_1.1.3.zip"
-
 
      # Initiate modules installation
      $headerValue = Create-Authorization $hmacAppId $hmacSecret
@@ -37,8 +32,4 @@ Param(
      Write-Output $moduleUploadResult
     $moduleInstallResult = Invoke-RestMethod -Uri $moduleInstallUrl -Method Post -Headers $headers -Body $moduleUploadResult
     Write-Output $moduleInstallResult
-    #$moduleState = Invoke-RestMethod "$restartUrl" -Method Post -ContentType "application/json" -Headers $headers
-    Start-Sleep -s 5
-
-
-
+    Start-Sleep -s 3
