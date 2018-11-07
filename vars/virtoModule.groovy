@@ -145,8 +145,8 @@ def call(body) {
                 stage('E2E'){
                     timestamps {
                         dir(Utilities.getTempFolder(this)){
-                            git url: 'https://github.com/VirtoCommerce/vc-platform-qg.git', branches: [[name: '*/dev-16']]
-                            bat "dir /w"
+                            git branch: 'dev-16', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
+                            bat "codeceptjs run"
                         }
                     }
                 }
