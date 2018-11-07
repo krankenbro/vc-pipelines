@@ -102,13 +102,6 @@ def call(body) {
 				}
 			}
 
-            stage("trigger slave"){
-                node('QualityGate'){
-                    sh 'ls / -al'
-                }
-            }
-
-
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
 				def buildOrder = Utilities.getNextBuildOrder(this)
 				projectType = config.projectType
