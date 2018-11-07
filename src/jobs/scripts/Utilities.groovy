@@ -6,7 +6,7 @@ class Utilities {
     private static String DefaultAdminDockerPrefix = 'http://localhost'
     private static Integer DefaultPlatformPort = 8090
     private static Integer DefaultStorefrontPort = 8080
-    private static Integer DefaultSqlPort = 1435
+    private static Integer DefaultSqlPort = 4567
 
     /**
      * Get the folder name for a job.
