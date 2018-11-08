@@ -148,7 +148,7 @@ def call(body) {
                             git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
 							def sfPort = Utilities.getStorefrontPort(this)
 							def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
-                            bat "codeceptjs run -o '${jsonConf}'"
+                            bat "codeceptjs run -o \"${jsonConf}\""
                         }
                     }
                 }
