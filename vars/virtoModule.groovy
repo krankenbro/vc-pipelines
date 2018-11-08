@@ -145,10 +145,10 @@ def call(body) {
                 stage('E2E'){
                     timestamps {
                         dir(Utilities.getTempFolder(this)){
-                            git branch: 'dev-16', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
+                            git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
 							def sfPort = Utilities.getStorefrontPort(this)
 							def jsonConf = "{\"helpers\":{\"Protractor\":{\"url\":\"http://localhost:${sfPort}\"}}}"
-                            bat "codeceptjs run -o ${jsonConf}"
+                            bat "codeceptjs run -o '${jsonConf}'"
                         }
                     }
                 }
