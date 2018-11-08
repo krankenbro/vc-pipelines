@@ -146,7 +146,8 @@ def call(body) {
                     timestamps {
                         dir(Utilities.getTempFolder(this)){
                             git branch: 'dev-16', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
-                            bat "codeceptjs run"
+							def sfPort = Utilities.getStorefrontPort(this)
+                            bat "codeceptjs run --override \"{ \"helpers\": {\"Protractor\": {\"url\": \"http://localhost:${sfPort}\"}}}\""
                         }
                     }
                 }
