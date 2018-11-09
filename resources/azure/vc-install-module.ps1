@@ -23,9 +23,9 @@ if ([string]::IsNullOrWhiteSpace($hmacSecret))
    $hmacSecret = "${env:HMAC_SECRET}"
 }
 
-docker cp "$moduleZipArchievePath" "$platformContainer:C:\"
+docker cp $moduleZipArchievePath $platformContainer:C:\vc-platform
 docker exec $platformContainer powershell -Command "Remove-Item C:\vc-platform\Modules\$moduleId -Force -Recurse"
-docker exec $platformContainer powershell -Command "Expand-Archive -Path C:\*.zip -DestinationPath C:\vc-platform\Modules\$moduleId"
+docker exec $platformContainer powershell -Command "Expand-Archive -Path C:\vc-platform\*.zip -DestinationPath C:\vc-platform\Modules\$moduleId"
 
 #restart platform
 $restartUrl = "$apiurl/api/platform/modules/restart"
