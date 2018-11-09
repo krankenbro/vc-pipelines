@@ -113,7 +113,7 @@ class Modules {
         if (manifests.size() > 0) {
             for (int i = 0; i < manifests.size(); i++)
             {
-                manifest = manifests[i].path
+                manifestPath = manifests[i].path
             }
         }
         else {
