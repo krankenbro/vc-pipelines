@@ -124,7 +124,7 @@ class Modules {
         def wsDir = context.env.WORKSPACE
         def fullManifestPath = "$wsDir\\$manifestPath"
 
-        echo "parsing $fullManifestPath"
+        context.echo "parsing $fullManifestPath"
         def manifest = new XmlSlurper().parse(fullManifestPath)
 
         def id = manifest.id.toString()
