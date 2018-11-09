@@ -338,6 +338,12 @@ class Utilities {
         return swagPaths
     }
 
+    def static getPlatformContainer(context){
+        def tag = context.env.BUILD_TAG.toLowerCase()
+        def containerId = 'vc-platform-web'
+        return "${tag}_${containerId}_1"
+    }
+
     @NonCPS
     def static getPDBDirs(context){
         def pdbDirs = []

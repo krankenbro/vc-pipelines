@@ -116,14 +116,16 @@ def call(body) {
 				}
 				stage('Prepare Test Environment') {
 					timestamps {
+						def moduleId = Modules.getModuleId(this)
+						def platformContainer = Utilities.getPlatformContainer(this)
 						// Start docker environment
 						Packaging.startDockerTestEnvironment(this, dockerTag)
 
-                        // install module
-                        Modules.installModuleArtifacts(this)
-
 						// install modules
 						Packaging.installModules(this)
+
+						// install module
+						Modules.installModuleArtifacts(this, moduleId, platformContainer)
 
 						//check installed modules
 						Packaging.checkInstalledModules(this)

@@ -32,7 +32,7 @@ class Modules {
         }
     }
 
-    def static installModuleArtifacts(context)
+    def static installModuleArtifacts(context, moduleId, platformContainer)
     {
         def packagesDir = Utilities.getArtifactFolder(context)
         def packages;
@@ -44,7 +44,7 @@ class Modules {
         if (packages.size() > 0) {
             for (int i = 0; i < packages.size(); i++)
             {
-                Packaging.installModule(context, "${packagesDir}\\${packages[i].path}")
+                Packaging.installModule(context, "${packagesDir}\\${packages[i].path}", moduleId, platformContainer)
             }
         }
     }
@@ -105,5 +105,30 @@ class Modules {
         paths += "\"..\\..\\..\\vc-platform\\${testFolderName}\\workspace\\virtocommerce.platform.tests\\bin\\debug\\VirtoCommerce.Platform.Test.dll\""
 
         return paths;
+    }
+
+    def static getModuleId(context){
+        def manifests = context.findFiles(glob: '**\\module.manifest')
+        def manifestPath = ""
+        if (manifests.size() > 0) {
+            for (int i = 0; i < manifests.size(); i++)
+            {
+                manifest = manifests[i].path
+            }
+        }
+        else {
+            echo "no module.manifest files found"
+            return null
+        }
+
+        def wsDir = context.env.WORKSPACE
+        def fullManifestPath = "$wsDir\\$manifestPath"
+
+        echo "parsing $fullManifestPath"
+        def manifest = new XmlSlurper().parse(fullManifestPath)
+
+        def id = manifest.id.toString()
+
+        return id
     }
 }

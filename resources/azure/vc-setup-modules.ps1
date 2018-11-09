@@ -20,7 +20,6 @@ Param(
      # Initialize paths used by the script
      $modulesStateUrl = "$apiurl/api/platform/pushnotifications"
      $modulesInstallUrl = "$apiurl/api/platform/modules/autoinstall"
-     $modulesRestartUrl = "$apiurl/api/platform/modules/restart"
 
      # Call homepage, to make sure site is compiled
      $initResult = Invoke-WebRequest $apiurl -UseBasicParsing
@@ -78,10 +77,6 @@ Param(
             }
             while (!$abort -and $notificationState.finished -eq $null -and $cycleCount -lt 180) # stop processing after 3 min or when notifications had stopped $moduleState.NotifyEvents.Length -ne 0 -and
 
-            Write-Output "Restarting website"
-            $moduleState = Invoke-RestMethod "$modulesRestartUrl" -Method Post -ContentType "application/json" -Headers $headers
-            Write-Output $moduleState                  
-            Write-Output $moduleState
       }
       catch
       {
