@@ -149,6 +149,7 @@ def call(body) {
                         dir(Utilities.getTempFolder(this)){
                             git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
 							def sfPort = Utilities.getStorefrontPort(this)
+							//CODECEPT_OUTPUT value must be escaped
 							def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
                             bat "codeceptjs run -o \"${jsonConf}\""
                         }
