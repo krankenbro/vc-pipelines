@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory = $true)]
     $apiurl,
     $hmacAppId,
     $hmacSecret
@@ -7,13 +7,11 @@ Param(
 
 . $PSScriptRoot\utilities.ps1
 
-if ([string]::IsNullOrWhiteSpace($hmacAppId))
-{
+if ([string]::IsNullOrWhiteSpace($hmacAppId)) {
     $hmacAppId = "${env:HMAC_APP_ID}"
 }
 
-if ([string]::IsNullOrWhiteSpace($hmacSecret))
-{
+if ([string]::IsNullOrWhiteSpace($hmacSecret)) {
     $hmacSecret = "${env:HMAC_SECRET}"
 }
 
@@ -24,17 +22,15 @@ $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $modules = Invoke-RestMethod $checkModulesUrl -Method Get -Headers $headers -ErrorAction Stop
 $installedModules = 0
-if($modules.Length -le 0)
-{
+if ($modules.Length -le 0) {
     Write-Output "No module's info returned"
     exit 1
 }
-Foreach($module in $modules)
-{
-    if($module.isInstalled){
+Foreach ($module in $modules) {
+    if ($module.isInstalled) {
         $installedModules++
     }
-    if($module.validationErrors.Length -gt 0){
+    if ($module.validationErrors.Length -gt 0) {
         Write-Output $module.id
         Write-Output $module.validationErrors
         exit 1

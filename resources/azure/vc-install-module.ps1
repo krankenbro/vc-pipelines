@@ -1,26 +1,24 @@
-Param(  
-  	[parameter(Mandatory=$true)]
-      $apiurl,
-      [parameter(Mandatory=$true)]
-      $moduleZipArchievePath,
-    [parameter(Mandatory=$true)]
+Param(
+    [parameter(Mandatory = $true)]
+    $apiurl,
+    [parameter(Mandatory = $true)]
+    $moduleZipArchievePath,
+    [parameter(Mandatory = $true)]
     $moduleId,
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory = $true)]
     $platformContainer,
-      $hmacAppId,
-      $hmacSecret
-     )
+    $hmacAppId,
+    $hmacSecret
+)
 
 . $PSScriptRoot\utilities.ps1
 
-if ([string]::IsNullOrWhiteSpace($hmacAppId))
-{
-   $hmacAppId = "${env:HMAC_APP_ID}"
+if ([string]::IsNullOrWhiteSpace($hmacAppId)) {
+    $hmacAppId = "${env:HMAC_APP_ID}"
 }
 
-if ([string]::IsNullOrWhiteSpace($hmacSecret))
-{
-   $hmacSecret = "${env:HMAC_SECRET}"
+if ([string]::IsNullOrWhiteSpace($hmacSecret)) {
+    $hmacSecret = "${env:HMAC_SECRET}"
 }
 
 Write-Output $platformContainer
