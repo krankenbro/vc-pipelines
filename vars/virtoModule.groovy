@@ -152,7 +152,8 @@ def call(body) {
 							//CODECEPT_OUTPUT value must be escaped
 							def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
                             bat "codeceptjs run -o \"${jsonConf}\""
-                        }
+							allure includeProperties: false, jdk: '', results: [[path: '${env.WORKSPACE}@tmp\\output']]
+						}
                     }
                 }
 			}
