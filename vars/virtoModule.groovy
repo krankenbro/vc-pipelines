@@ -153,7 +153,6 @@ def call(body) {
 							//def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
 							def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
                             bat "codeceptjs run -o \"${jsonConf}\""
-							allure includeProperties: false, jdk: '', results: [[path: '${env.WORKSPACE}@tmp\\output']]
 						}
                     }
                 }
@@ -174,6 +173,7 @@ def call(body) {
 			throw e
 		}
 		finally {
+			allure includeProperties: false, jdk: '', results: [[path: '${env.WORKSPACE}@tmp\\output']]
 			Packaging.stopDockerTestEnvironment(this, dockerTag)
 			if(currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
