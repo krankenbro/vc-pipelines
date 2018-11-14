@@ -13,7 +13,7 @@ def call(body) {
 	projectType = config.projectType
     node
     {
-		def dockerTag = env.BRANCH_NAME
+		def dockerTag = "${env.BRANCH_NAME}-branch"
 		
 		if(projectType == null) {
 			projectType = "NET4"
