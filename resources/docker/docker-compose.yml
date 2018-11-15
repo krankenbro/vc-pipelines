@@ -44,4 +44,5 @@ volumes:
 
 networks:
   virto:
-    driver: nat
+    external:
+      driver: transparent
