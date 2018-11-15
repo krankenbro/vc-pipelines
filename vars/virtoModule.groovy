@@ -9,12 +9,13 @@ def call(body) {
     def config = [:]
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
-    body()
 	projectType = config.projectType
 
 	node {
 		def wsPath = pwd().replaceAll('i', 'ZZZ')
-		customWorkspace wsPath
+		ws(wsPath) {
+			body()
+		}
 		def dockerTag = "${env.BRANCH_NAME}-branch"
 
 		if (projectType == null) {
