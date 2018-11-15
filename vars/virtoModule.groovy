@@ -10,11 +10,11 @@ def call(body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
 	projectType = config.projectType
-
+	ws(wsPath) {
+		body()
 	node {
 		def wsPath = pwd().replaceAll('i', 'ZZZ')
-		ws(wsPath) {
-			body()
+
 
 			def dockerTag = "${env.BRANCH_NAME}-branch"
 
