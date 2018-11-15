@@ -33,7 +33,7 @@ class Utilities {
 
     def static runSharedPS(context, scriptName, args = '')
     {
-    	def wsFolder = context.pwd()
+    	def wsFolder = context.env.WORKSPACE
  	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\${scriptName}\" ${args} -ErrorAction Stop"
     }
 
@@ -43,7 +43,7 @@ class Utilities {
         {
             context.echo "Reading $projectFile file"
 
-            def wsDir = context.pwd()
+            def wsDir = context.env.WORKSPACE
             def fullManifestPath = "$wsDir\\$projectFile"
             def manifest = new XmlSlurper().parse(fullManifestPath)
 
@@ -78,7 +78,7 @@ class Utilities {
         {
             context.echo "Reading $projectFile file"
 
-            def wsDir = context.pwd()
+            def wsDir = context.env.WORKSPACE
             def fullManifestPath = "$wsDir\\$projectFile"
             def manifest = new XmlSlurper().parse(fullManifestPath)
 
@@ -111,7 +111,7 @@ class Utilities {
 
     def static getArtifactFolder(context)
     {
-        def wsFolder = context.pwd()
+        def wsFolder = context.env.WORKSPACE
         def packagesDir = "$wsFolder\\artifacts"
         return packagesDir
     }
@@ -146,7 +146,8 @@ class Utilities {
 
     def static getTempFolder(context)
     {
-        def tempFolder = context.pwd(tmp: true)
+        //def tempFolder = context.pwd(tmp: true)
+        def tempFolder = "${context.env.WORKSPACE}@tmp"
         return tempFolder
     }
 
@@ -347,7 +348,7 @@ class Utilities {
     @NonCPS
     def static getPDBDirs(context){
         def pdbDirs = []
-        def currentDir = new File(context.pwd())
+        def currentDir = new File(context.env.WORKSPACE)
         currentDir.eachDirRecurse(){ dir->
             if(dir.getPath() =~ /.*\\bin/)
                 pdbDirs << dir.path
