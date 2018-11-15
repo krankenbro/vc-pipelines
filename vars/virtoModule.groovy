@@ -4,16 +4,16 @@ import groovy.util.*
 import jobs.scripts.*
 
 def call(body) {
+	node {
 
-    // evaluate the body block, and collect configuration into the object
-    def config = [:]
-    body.resolveStrategy = Closure.DELEGATE_FIRST
-    body.delegate = config
-	projectType = config.projectType
-	def wsPath = pwd().replaceAll('i', 'ZZZ')
-	ws(wsPath) {
-		body()
-		node {
+		// evaluate the body block, and collect configuration into the object
+		def config = [:]
+		body.resolveStrategy = Closure.DELEGATE_FIRST
+		body.delegate = config
+		projectType = config.projectType
+		def wsPath = pwd().replaceAll('i', 'ZZZ')
+		ws(wsPath) {
+			body()
 
 
 			def dockerTag = "${env.BRANCH_NAME}-branch"
