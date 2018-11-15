@@ -173,7 +173,7 @@ def call(body) {
 			throw e
 		}
 		finally {
-			allure includeProperties: false, jdk: '', results: [[path: '${env.WORKSPACE}@tmp\\output']]
+			allure includeProperties: false, jdk: '', results: [[path: './output']]
 			Packaging.stopDockerTestEnvironment(this, dockerTag)
 			if(currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
