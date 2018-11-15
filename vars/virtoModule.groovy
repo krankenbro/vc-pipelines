@@ -11,7 +11,7 @@ def call(body) {
     body.delegate = config
     body()
 	projectType = config.projectType
-	ws(pwd().replaceAll('%2F', '_'))
+	ws(pwd().replaceAll('i', 'ZZZ'))
     node {
 		def dockerTag = "${env.BRANCH_NAME}-branch"
 		
