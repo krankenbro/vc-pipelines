@@ -44,4 +44,4 @@ volumes:
 
 networks:
   virto:
-    driver: transparent
+    driver: l2bridge
