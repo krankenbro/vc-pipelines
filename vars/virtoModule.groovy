@@ -4,180 +4,176 @@ import groovy.util.*
 import jobs.scripts.*
 
 def call(body) {
+
+	// evaluate the body block, and collect configuration into the object
+	def config = [:]
+	body.resolveStrategy = Closure.DELEGATE_FIRST
+	body.delegate = config
+	projectType = config.projectType
+	body()
+
 	node {
 
-		// evaluate the body block, and collect configuration into the object
-		def config = [:]
-		body.resolveStrategy = Closure.DELEGATE_FIRST
-		body.delegate = config
-		projectType = config.projectType
-		def wsPath = pwd().replaceAll('i', 'ZZZ')
-		ws(wsPath) {
-			body()
+		def dockerTag = "${env.BRANCH_NAME}-branch"
 
+		if (projectType == null) {
+			projectType = "NET4"
+		}
 
-			def dockerTag = "${env.BRANCH_NAME}-branch"
-
-			if (projectType == null) {
-				projectType = "NET4"
+		try {
+			stage("Checkout") {
+				timestamps {
+					checkout scm
+				}
 			}
 
-			try {
-				stage("Checkout") {
-					timestamps {
-						checkout scm
-					}
-				}
-
-				stage("Build") {
-					timestamps {
-						def solutions = findFiles(glob: '*.sln')
+			stage("Build") {
+				timestamps {
+					def solutions = findFiles(glob: '*.sln')
 
 
-						if (solutions.size() > 0) {
-							Packaging.startAnalyzer(this)
-							for (int i = 0; i < solutions.size(); i++) {
-								def solution = solutions[i]
-								bat "${env.NUGET}\\nuget restore ${solution}"
-								bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
-							}
+					if (solutions.size() > 0) {
+						Packaging.startAnalyzer(this)
+						for (int i = 0; i < solutions.size(); i++) {
+							def solution = solutions[i]
+							bat "${env.NUGET}\\nuget restore ${solution}"
+							bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
 						}
-					}
-				}
-
-				stage('Package Module')
-						{
-							timestamps {
-								processManifests(false) // prepare artifacts for testing
-							}
-						}
-
-				def tests = Utilities.getTestDlls(this)
-				if (projectType == "NETCORE2" && tests.size() < 1) {
-					tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
-				}
-				if (tests.size() > 0) {
-					stage('Tests') {
-						timestamps {
-							String paths = ""
-							String traits = "-trait \"category=ci\" -trait \"category=Unit\""
-							String resultsFileName = "xUnit.UnitTests.xml"
-							String coverageFolder = Utilities.getCoverageFolder(this)
-							// remove old folder
-							dir(coverageFolder)
-									{
-										deleteDir()
-									}
-
-							// recreate it now
-							File folder = new File(coverageFolder);
-							if (!folder.mkdirs()) {
-								throw new Exception("can't create coverage folder: " + coverageFolder);
-							}
-							for (int i = 0; i < tests.size(); i++) {
-								def test = tests[i]
-								paths += "\"$test.path\" "
-							}
-							if (projectType == "NETCORE2") {
-								bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
-							} else {
-								def pdbDirs = Utilities.getPDBDirsStr(this)
-								bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs}\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=CI)\""
-//${traits}\""
-								//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
-							}
-						}
-					}
-				}
-				stage('Stop Analyze') {
-					timestamps {
-						Packaging.endAnalyzer(this)
-					}
-				}
-
-				// No need to occupy a node
-				stage("Quality Gate") {
-					timestamps {
-						Packaging.checkAnalyzerGate(this)
-					}
-				}
-
-				if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
-					def buildOrder = Utilities.getNextBuildOrder(this)
-					projectType = config.projectType
-					if (env.BRANCH_NAME == 'master') {
-						dockerTag = "latest"
-					}
-					stage('Build platform and storefront') {
-						timestamps {
-							//build("../vc-platform/${dockerTag}")
-							//build("../vc-storefront-core/${dockerTag}")
-						}
-					}
-					stage('Prepare Test Environment') {
-						timestamps {
-							def moduleId = Modules.getModuleId(this)
-							def platformContainer = Utilities.getPlatformContainer(this)
-							// Start docker environment
-							Packaging.startDockerTestEnvironment(this, dockerTag)
-
-							// install modules
-							Packaging.installModules(this)
-
-							// install module
-							Modules.installModuleArtifacts(this, moduleId, platformContainer)
-
-							//check installed modules
-							Packaging.checkInstalledModules(this)
-
-							// now create sample data
-							Packaging.createSampleData(this)
-						}
-					}
-
-					stage('Swagger Validation') {
-						timestamps {
-							def tempFolder = Utilities.getTempFolder(this)
-							def swaggerFile = "${tempFolder}\\swagger.json"
-							Packaging.createSwaggerSchema(this, swaggerFile)
-							bat "swagger-cli validate ${swaggerFile}"
-						}
-					}
-
-					stage('E2E') {
-						timestamps {
-							dir(Utilities.getTempFolder(this)) {
-								git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
-								def sfPort = Utilities.getStorefrontPort(this)
-								//CODECEPT_OUTPUT value must be escaped
-								//def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
-								def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
-								bat "codeceptjs run -o \"${jsonConf}\""
-							}
-						}
-					}
-				}
-
-				stage('Cleanup') {
-					timestamps {
-						Packaging.cleanSolutions(this)
 					}
 				}
 			}
-			catch (Throwable e) {
-				currentBuild.result = 'FAILURE'
-				def log = currentBuild.rawBuild.getLog(300)
-				def failedStageLog = Utilities.getFailedStageStr(log)
-				def failedStageName = Utilities.getFailedStageName(failedStageLog)
-				Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageName} \n\n${failedStageLog}"
-				throw e
+
+			stage('Package Module')
+					{
+						timestamps {
+							processManifests(false) // prepare artifacts for testing
+						}
+					}
+
+			def tests = Utilities.getTestDlls(this)
+			if (projectType == "NETCORE2" && tests.size() < 1) {
+				tests = findFiles(glob: '**\\bin\\Debug\\*\\*Tests.dll')
 			}
-			finally {
-				allure includeProperties: false, jdk: '', results: [[path: './output']]
-				Packaging.stopDockerTestEnvironment(this, dockerTag)
-				if (currentBuild.result != 'FAILURE') {
-					Utilities.sendMail(this, "${currentBuild.currentResult}")
+			if (tests.size() > 0) {
+				stage('Tests') {
+					timestamps {
+						String paths = ""
+						String traits = "-trait \"category=ci\" -trait \"category=Unit\""
+						String resultsFileName = "xUnit.UnitTests.xml"
+						String coverageFolder = Utilities.getCoverageFolder(this)
+						// remove old folder
+						dir(coverageFolder)
+								{
+									deleteDir()
+								}
+
+						// recreate it now
+						File folder = new File(coverageFolder);
+						if (!folder.mkdirs()) {
+							throw new Exception("can't create coverage folder: " + coverageFolder);
+						}
+						for (int i = 0; i < tests.size(); i++) {
+							def test = tests[i]
+							paths += "\"$test.path\" "
+						}
+						if (projectType == "NETCORE2") {
+							bat "dotnet vstest ${paths} --TestCaseFilter:\"Category=Unit\""
+						} else {
+							def pdbDirs = Utilities.getPDBDirsStr(this)
+							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs}\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=CI)\""
+							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
+						}
+					}
 				}
+			}
+			stage('Stop Analyze') {
+				timestamps {
+					Packaging.endAnalyzer(this)
+				}
+			}
+
+			// No need to occupy a node
+			stage("Quality Gate") {
+				timestamps {
+					Packaging.checkAnalyzerGate(this)
+				}
+			}
+
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master') {
+				def buildOrder = Utilities.getNextBuildOrder(this)
+				projectType = config.projectType
+				if (env.BRANCH_NAME == 'master') {
+					dockerTag = "latest"
+				}
+				stage('Build platform and storefront') {
+					timestamps {
+						//build("../vc-platform/${dockerTag}")
+						//build("../vc-storefront-core/${dockerTag}")
+					}
+				}
+				stage('Prepare Test Environment') {
+					timestamps {
+						def moduleId = Modules.getModuleId(this)
+						def platformContainer = Utilities.getPlatformContainer(this)
+						// Start docker environment
+						Packaging.startDockerTestEnvironment(this, dockerTag)
+
+						// install modules
+						Packaging.installModules(this)
+
+						// install module
+						Modules.installModuleArtifacts(this, moduleId, platformContainer)
+
+						//check installed modules
+						Packaging.checkInstalledModules(this)
+
+						// now create sample data
+						Packaging.createSampleData(this)
+					}
+				}
+
+				stage('Swagger Validation') {
+					timestamps {
+						def tempFolder = Utilities.getTempFolder(this)
+						def swaggerFile = "${tempFolder}\\swagger.json"
+						Packaging.createSwaggerSchema(this, swaggerFile)
+						bat "swagger-cli validate ${swaggerFile}"
+					}
+				}
+
+				stage('E2E') {
+					timestamps {
+						dir(Utilities.getTempFolder(this)) {
+							git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
+							def sfPort = Utilities.getStorefrontPort(this)
+							//CODECEPT_OUTPUT value must be escaped
+							//def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
+							def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
+							bat "codeceptjs run -o \"${jsonConf}\""
+						}
+					}
+				}
+			}
+
+			stage('Cleanup') {
+				timestamps {
+					Packaging.cleanSolutions(this)
+				}
+			}
+		}
+		catch (Throwable e) {
+			currentBuild.result = 'FAILURE'
+			def log = currentBuild.rawBuild.getLog(300)
+			def failedStageLog = Utilities.getFailedStageStr(log)
+			def failedStageName = Utilities.getFailedStageName(failedStageLog)
+			Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageName} \n\n${failedStageLog}"
+			throw e
+		}
+		finally {
+			allure includeProperties: false, jdk: '', results: [[path: "/${env.WORKSPACE}@tmp/output"]]
+			Packaging.stopDockerTestEnvironment(this, dockerTag)
+			if (currentBuild.result != 'FAILURE') {
+				Utilities.sendMail(this, "${currentBuild.currentResult}")
 			}
 		}
 	}
