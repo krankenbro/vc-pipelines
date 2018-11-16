@@ -149,7 +149,7 @@ def call(body) {
 							//CODECEPT_OUTPUT value must be escaped
 							//def jsonConf = "{\\\"output\\\":\\\"${env.CODECEPT_OUTPUT}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
 							def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
-							bat "codeceptjs run -o \"${jsonConf}\""
+							bat "codeceptjs run --headless -o \"${jsonConf}\""
 						}
 					}
 				}
