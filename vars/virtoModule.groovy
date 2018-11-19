@@ -143,7 +143,10 @@ def call(body) {
 
 				stage('E2E') {
 					timestamps {
-						dir(Utilities.getTempFolder(this)) {
+						def tmp = Utilities.getTempFolder(this)
+						def e2eDir = "${tmp}\\e2e"
+						dir(e2eDir) {
+							deleteDir()
 							git branch: 'dev', credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
 							def sfPort = Utilities.getStorefrontPort(this)
 							//CODECEPT_OUTPUT value must be escaped
