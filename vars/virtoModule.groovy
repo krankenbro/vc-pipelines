@@ -44,11 +44,11 @@ def call(body) {
 			}
 
 			stage('Package Module')
-					{
-						timestamps {
-							processManifests(false) // prepare artifacts for testing
-						}
-					}
+			{
+				timestamps {
+					processManifests(false) // prepare artifacts for testing
+				}
+			}
 
 			def tests = Utilities.getTestDlls(this)
 			if (projectType == "NETCORE2" && tests.size() < 1) {
@@ -81,7 +81,6 @@ def call(body) {
 						} else {
 							def pdbDirs = Utilities.getPDBDirsStr(this)
 							bat "\"${env.OPENCOVER}\\opencover.console.exe\" -searchdirs:\"${pdbDirs}\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -register:user -target:\"${env.VSTEST_DIR}\\vstest.console.exe\" -targetargs:\"${paths} /TestCaseFilter:(Category=Unit|Category=CI)\""
-							//bat "\"${env.XUnit}\\xunit.console.exe\" ${paths} -xml \"${resultsFileName}\" ${traits} -parallel none"
 						}
 					}
 				}
@@ -262,24 +261,6 @@ def processManifest(def publish, def manifestPath)
 	echo "prepare release $manifestDirectory"
 	Modules.createModuleArtifact(this, manifestDirectory)
 
-	if (false && publish) {
-		packageUrl = Packaging.publishRelease(this, version, releaseNotes)
-
-		updateModule(
-			id,
-			version,
-			platformVersion,
-			title,
-			authors,
-			owners,
-			description,
-			dependencies,
-			projectUrl,
-			packageUrl,
-			iconUrl)
-
-		publishTweet("${title} ${version} published ${projectUrl} #virtocommerceci")
-	}
 }
 
 def publishTweet(def status)
