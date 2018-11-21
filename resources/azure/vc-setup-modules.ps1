@@ -33,7 +33,7 @@ $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
 $headers.Add("Authorization", $headerValue)
 $moduleImportResult = Invoke-RestMethod $modulesInstallUrl -Method Post -Headers $headers -ErrorAction Stop
-
+Write-Output $moduleImportResult
 Start-Sleep -s 1
 
 # save notification id, so we can get status of the operation
@@ -67,6 +67,11 @@ try {
         Start-Sleep -s 3
     }
     while ($notificationState.finished -eq $null -and $cycleCount -lt 60) # stop processing after 3 min or when notifications had stopped $moduleState.NotifyEvents.Length -ne 0 -and
+    if($notificationState.finished -eq $null){
+        Write-Output "error on modules installation"
+        Write-Output $moduleState
+        exit 1
+    }
 
     if($null -ne $needRestart -and $needRestart -gt 0){
         Write-Output "Restarting website"
