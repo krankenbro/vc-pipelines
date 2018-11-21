@@ -35,3 +35,8 @@ services:
 
 volumes:
   cms-content-volume:
+
+networks:
+  default:
+    external:
+      name: nat
