@@ -10,7 +10,7 @@ services:
     - ACCEPT_EULA=Y
     - sa_password=v!rto_Labs!
     networks:
-    - default
+    - virto
 
   vc-platform-web:
     image: virtocommerce/platform:${DOCKER_TAG:-latest}
@@ -24,7 +24,7 @@ services:
     volumes:
     - cms-content-volume:c:\vc-platform\App_Data\cms-content
     networks:
-    - default
+    - virto
 
   vc-storefront-web:
     image: virtocommerce/storefront:${DOCKER_TAG:-latest}
@@ -37,13 +37,13 @@ services:
     volumes:
     - cms-content-volume:C:\vc-storefront\wwwroot\cms-content
     networks:
-    - default
+    - virto
 
 volumes:
   cms-content-volume:
 
 
 networks:
-  default:
+  virto:
     external:
       name: nat
