@@ -46,7 +46,6 @@ $NotificationStateJson = @"
 
 $cycleCount = 0
 $startIndex = 0
-$abort = $false
 try {
     do {
         # Retrieve notification state
