@@ -9,6 +9,8 @@ services:
     environment:
     - ACCEPT_EULA=Y
     - sa_password=v!rto_Labs!
+    networks:
+    - default
 
   vc-platform-web:
     image: virtocommerce/platform:${DOCKER_TAG:-latest}
@@ -21,6 +23,8 @@ services:
     - vc-db
     volumes:
     - cms-content-volume:c:\vc-platform\App_Data\cms-content
+    networks:
+    - default
 
   vc-storefront-web:
     image: virtocommerce/storefront:${DOCKER_TAG:-latest}
@@ -32,9 +36,12 @@ services:
     - vc-platform-web
     volumes:
     - cms-content-volume:C:\vc-storefront\wwwroot\cms-content
+    networks:
+    - default
 
 volumes:
   cms-content-volume:
+
 
 networks:
   default:
