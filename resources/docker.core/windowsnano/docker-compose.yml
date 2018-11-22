@@ -44,5 +44,4 @@ volumes:
 
 networks:
   virto:
-    name: virto_net
     driver: transparent
