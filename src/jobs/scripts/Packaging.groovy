@@ -53,7 +53,7 @@ class Packaging {
             // 2. remove instances including database
             // 3. start up new containers
             context.withEnv(["DOCKER_TAG=${dockerTag}", "DOCKER_PLATFORM_PORT=${platformPort}", "DOCKER_STOREFRONT_PORT=${storefrontPort}", "DOCKER_SQL_PORT=${sqlPort}", "COMPOSE_PROJECT_NAME=${context.env.BUILD_TAG}" ]) {
-                context.bat "docker-compose down -v"
+                context.bat "docker-compose down"
                 try {
                     def tryNumber = 1
                     retry(3){
