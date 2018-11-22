@@ -40,4 +40,5 @@ volumes:
 networks:
   default:
     external:
-      name: nat
+      name: virto
+      driver: transparent
