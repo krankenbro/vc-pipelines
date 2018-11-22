@@ -58,7 +58,7 @@ class Packaging {
                     def tryNumber = 1
                     context.retry(3){
                         context.echo "Number of try to start containers: ${tryNumber}"
-                        context.sleep(time: tryNumber-1, unit: SECONDS)
+                        context.sleep(time: tryNumber-1, unit: 'SECONDS')
                         context.bat "docker-compose up -d"
                     }
                 }
