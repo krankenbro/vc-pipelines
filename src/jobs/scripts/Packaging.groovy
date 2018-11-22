@@ -63,6 +63,7 @@ class Packaging {
                     }
                 }
                 catch (err){
+                    context.echo err.message
                     context.currentBuild.result = "FAILURE"
                     throw err
                 }
