@@ -48,7 +48,7 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
-					def projs = findFiles(glob:  '*.csproj')
+					def projs = findFiles(glob:  '**\\*.csproj')
 					for(int i=0; i<projs.size(); i++){
 						Packaging.packNuget(projs[i].path)
 					}
