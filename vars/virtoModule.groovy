@@ -50,7 +50,7 @@ def call(body) {
 
 					def projs = findFiles(glob:  '**\\*.csproj')
 					for(int i=0; i<projs.size(); i++){
-						Packaging.packNuget(projs[i].path)
+						Packaging.packNuget("\"projs[i].path\"")
 					}
 				}
 			}
