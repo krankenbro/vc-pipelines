@@ -154,9 +154,9 @@ def call(body) {
 							dir(allureReportPath){
 								deleteDir()
 							}
-							dir(allureResultsPath){
-								deleteDir()
-							}
+//							dir(allureResultsPath){
+//								deleteDir()
+//							}
 							def allureResultsEsc = allureResultsPath.replace("\\", "\\\\")
 							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
 							//def jsonConf = "{\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
