@@ -205,6 +205,10 @@ class Packaging {
         }
     }
 
+    def static packNuget(context, proj){
+        context.bat "nuget pack ${proj}"
+    }
+
     def static cleanSolutions(context)
     {
         def solutions = context.findFiles(glob: '*.sln')
