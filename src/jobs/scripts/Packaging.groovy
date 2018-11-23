@@ -206,7 +206,7 @@ class Packaging {
     }
 
     def static packNuget(context, proj){
-        context.bat "nuget pack ${proj}"
+        context.bat "Nuget pack ${proj}"
     }
 
     def static cleanSolutions(context)
