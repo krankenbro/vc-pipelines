@@ -2,6 +2,7 @@
 import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
+import groovy.io.FileType
 
 def call(body) {
 
