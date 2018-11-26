@@ -48,10 +48,19 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
-					def projs = findFiles(glob:  '**\\*.csproj')
-					for(int i=0; i<projs.size(); i++){
-						Packaging.packNuget(this, "\"${projs[i].path}\"")
-					}
+//					def projs = findFiles(glob:  '**\\*.csproj')
+//					for(int i=0; i<projs.size(); i++){
+//						Packaging.packNuget(this, "\"${projs[i].path}\"")
+//					}
+                    String folderPath = "${env.WORKSPACE}\\NuGet"
+                    new File(folderPath).eachFile (FileType.FILES) { file ->
+                        if (file.name.contains('.nupkg')) file.delete()
+                    }
+                    dir(folderPath){
+                        withEnv(["MSBUILD_PATH=${tool 'DefaultMSBuild'}\\msbuild.exe", "PATH+=${env.NUGET}\\nuget.exe"]){
+                            bat "build ${env.WORKSPACE}"
+                        }
+                    }
 				}
 			}
 
