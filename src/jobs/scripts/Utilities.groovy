@@ -381,7 +381,7 @@ class Utilities {
     @NonCPS
     def static findCsproj(context, line){
         //def res = (line =~/(VirtoCommerce.+csproj)/)
-        def res = (line =~/(VirtoCommerce)/)
+        def res = (line =~/.*(VirtoCommerce.+csproj).*/)
         if(!res.matches()){
             context.echo "Not matches ${res.toString()}"
         }
