@@ -1,4 +1,6 @@
-package jobs.scripts;
+package jobs.scripts
+
+import groovy.io.FileType;
 
 class Utilities {
 
@@ -344,6 +346,34 @@ class Utilities {
         return "${tag}_${containerId}_1"
     }
 
+    @NonCSP
+    def static createNugets(context){
+        String folderPath = "${context.env.WORKSPACE}\\NuGet"
+        if(new File(folderPath).exists()){
+            new File(folderPath).eachFile (FileType.FILES) { file ->
+                context.echo "found file: ${file.name}"
+                if (file.extension.contains('nupkg')) {
+                    context.echo "remove ${file.name}"
+                    file.delete()
+                }
+            }
+
+            context.dir(folderPath){
+                def buildFilePath = "${folderPath}\\build.bat"
+                context.echo "build file path ${buildFilePath}"
+                def buildFile = new File(buildFilePath)
+                for (line in buildFile.readLines()) {
+                    def res = findCsproj(this, line)
+                    context.echo "next line: ${line}"
+                    if(res){
+                        def command = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                        context.echo command
+                        context.bat command
+                    }
+                }
+            }
+        }
+    }
     @NonCPS
     def static findCsproj(context, line){
         def res = (line =~ /VirtoCommerce\..+\.csproj/)

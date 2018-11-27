@@ -49,31 +49,32 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
-                    String folderPath = "${env.WORKSPACE}\\NuGet"
-					if(new File(folderPath).exists()){
-						new File(folderPath).eachFile (FileType.FILES) { file ->
-							echo "found file: ${file.name}"
-							if (file.extension.contains('nupkg')) {
-								echo "remove ${file.name}"
-								file.delete()
-							}
-						}
-
-						dir(folderPath){
-							def buildFilePath = "${folderPath}\\build.bat"
-							echo "build file path ${buildFilePath}"
-							def buildFile = new File(buildFilePath)
-							for (line in buildFile.readLines()) {
-								def res = Utilities.findCsproj(this, line)
-								echo "next line: ${line}"
-								if(res){
-									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
-									echo command
-									bat command
-								}
-							}
-						}
-					}
+					Utilities.createNugets(this)
+//                    String folderPath = "${env.WORKSPACE}\\NuGet"
+//					if(new File(folderPath).exists()){
+//						new File(folderPath).eachFile (FileType.FILES) { file ->
+//							echo "found file: ${file.name}"
+//							if (file.extension.contains('nupkg')) {
+//								echo "remove ${file.name}"
+//								file.delete()
+//							}
+//						}
+//
+//						dir(folderPath){
+//							def buildFilePath = "${folderPath}\\build.bat"
+//							echo "build file path ${buildFilePath}"
+//							def buildFile = new File(buildFilePath)
+//							for (line in buildFile.readLines()) {
+//								def res = Utilities.findCsproj(this, line)
+//								echo "next line: ${line}"
+//								if(res){
+//									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+//									echo command
+//									bat command
+//								}
+//							}
+//						}
+//					}
 
 //					withEnv(["MSBUILD_PATH=${tool 'DefaultMSBuild'}\\msbuild.exe", "PATH+=${env.NUGET}\\nuget.exe"]){
 //						bat "build ${env.WORKSPACE}"
