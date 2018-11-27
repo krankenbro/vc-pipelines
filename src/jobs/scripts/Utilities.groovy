@@ -361,6 +361,7 @@ class Utilities {
                     def res = findCsproj(context, line)
                     if(res){
                         def csprj = res
+                        context.echo res
                         def projectFiles = context.findFiles(glob: "**\\${csprj}")
                         def command = "${context.env.NUGET}\\nuget pack \"${projectFiles[0].path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
                         context.echo command
