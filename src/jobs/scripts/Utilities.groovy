@@ -352,7 +352,7 @@ class Utilities {
         if(new File(folderPath).exists()){
             new File(folderPath).eachFile (FileType.FILES) { file ->
                 context.echo "found file: ${file.name}"
-                if (file.extension.contains('nupkg')) {
+                if (file.name.contains('nupkg')) {
                     context.echo "remove ${file.name}"
                     file.delete()
                 }
