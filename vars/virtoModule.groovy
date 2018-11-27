@@ -52,15 +52,22 @@ def call(body) {
                     String folderPath = "${env.WORKSPACE}\\NuGet"
 					if(new File(folderPath).exists()){
 						new File(folderPath).eachFile (FileType.FILES) { file ->
-							if (file.name.contains('.nupkg')) file.delete()
+							if (file.name.contains('.nupkg')) {
+								echo "remove ${file.name}"
+								file.delete()
+							}
 						}
 
 						dir(folderPath){
-							def buildFile = new File("${folderPath}\\build.bat")
+							def buildFilePath = "${folderPath}\\build.bat"
+							echo "build file path ${buildFilePath}"
+							def buildFile = new File(buildFilePath)
 							for (line in buildFile.readLines()) {
 								def res = line =~ /VirtoCommerce\..+\.csproj/
 								if(res.size()>0){
-									bat "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+									echo command
+									bat command
 								}
 							}
 						}
