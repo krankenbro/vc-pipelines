@@ -51,11 +51,16 @@ def call(body) {
 
                     String folderPath = "${env.WORKSPACE}\\NuGet"
 					if(new File(folderPath).exists()){
-						new File(folderPath).eachFile (FileType.FILES) { file ->
-							if (file.name.contains('.nupkg')) {
-								echo "remove ${file.name}"
+//						new File(folderPath).eachFile (FileType.FILES) { file ->
+//							if (file.extension.contains('.nupkg')) {
+//								echo "remove ${file.name}"
+//								file.delete()
+//							}
+//						}
+						def oldFiles = findFiles(glob: "${folderPath}\\*.nupkg")
+						oldFiles.each {
+							file->
 								file.delete()
-							}
 						}
 
 						dir(folderPath){
@@ -74,9 +79,9 @@ def call(body) {
 						}
 					}
 
-					withEnv(["MSBUILD_PATH=${tool 'DefaultMSBuild'}\\msbuild.exe", "PATH+=${env.NUGET}\\nuget.exe"]){
-						bat "build ${env.WORKSPACE}"
-					}
+//					withEnv(["MSBUILD_PATH=${tool 'DefaultMSBuild'}\\msbuild.exe", "PATH+=${env.NUGET}\\nuget.exe"]){
+//						bat "build ${env.WORKSPACE}"
+//					}
 				}
 			}
 
