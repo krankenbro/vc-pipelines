@@ -55,7 +55,7 @@ def call(body) {
 							if (file.name.contains('.nupkg')) file.delete()
 						}
 
-						ws(folderPath){
+						dir(folderPath){
 							def buildFile = new File("${folderPath}\\build.bat")
 							for (line in buildFile.readLines()) {
 								def res = line =~ /VirtoCommerce\..+\.csproj/
