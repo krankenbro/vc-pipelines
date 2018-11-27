@@ -345,7 +345,7 @@ class Utilities {
     }
 
     @NonCPS
-    def static findCsproj(line){
+    def static findCsproj(context, line){
         def res = (line =~ /VirtoCommerce\..+\.csproj/)
         context.echo res
         if(res.size() < 1){

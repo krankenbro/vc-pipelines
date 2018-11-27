@@ -68,7 +68,7 @@ def call(body) {
 							echo "build file path ${buildFilePath}"
 							def buildFile = new File(buildFilePath)
 							for (line in buildFile.readLines()) {
-								def res = Utilities.findCsproj(line)
+								def res = Utilities.findCsproj(this, line)
 								echo "next line: ${line}"
 								if(res){
 									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
