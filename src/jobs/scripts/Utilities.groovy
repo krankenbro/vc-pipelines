@@ -378,10 +378,7 @@ class Utilities {
         context.dir(context.env.WORKSPACE){
             projectFiles = context.findFiles(glob: "**\\${name}")
         }
-        if(projectFiles.size()>0){
-            return projectFiles[0].path
-        }
-        return null
+        return projectFiles[0].path
     }
     @NonCPS
     def static cleanOldNugets(context){
