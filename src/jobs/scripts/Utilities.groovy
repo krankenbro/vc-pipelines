@@ -363,7 +363,7 @@ class Utilities {
                         def csprj = getCsprojPath(context, res)
                         if(csprj){
                             echo csprj
-                            def batCommand = "${context.env.NUGET}\\nuget pack \"${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                            def batCommand = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
                             context.echo batCommand
                             context.bat batCommand
                         }
@@ -377,7 +377,7 @@ class Utilities {
             context.echo "File name is: ${name}"
             def projectFiles = context.findFiles(glob: "**\\${name}")
             context.echo "Found path: ${projectFiles[0].path}"
-            return projectFiles[0].path
+            return projectFiles[0].path[0]
         }
     }
     @NonCPS
