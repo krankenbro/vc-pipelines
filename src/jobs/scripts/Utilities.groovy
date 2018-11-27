@@ -357,10 +357,10 @@ class Utilities {
                 context.echo "build file path ${buildFilePath}"
                 def buildFile = new File(buildFilePath)
                 for (line in buildFile.readLines()) {
-                    def res = findCsproj(context, line)
                     context.echo "next line: ${line}"
-                    if(res.matches()){
-                        def csprj = res.group(1)
+                    def res = findCsproj(context, line)
+                    if(res){
+                        def csprj = res
                         def projectFiles = context.findFiles(glob: "**\\${csprj}")
                         def command = "${context.env.NUGET}\\nuget pack \"${projectFiles[0].path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
                         context.echo command
@@ -387,8 +387,9 @@ class Utilities {
         def res = (line =~/.*(VirtoCommerce.+csproj).*/)
         if(!res.matches()){
             context.echo "Not matches ${res.toString()}"
+            res = null
         }
-        return res
+        return res.group(1)
     }
 
     @NonCPS
