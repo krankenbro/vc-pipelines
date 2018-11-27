@@ -387,7 +387,7 @@ class Utilities {
         def res = (line =~/.*(VirtoCommerce.+csproj).*/)
         if(!res.matches()){
             context.echo "Not matches ${res.toString()}"
-            res = null
+            return null
         }
         return res.group(1)
     }
