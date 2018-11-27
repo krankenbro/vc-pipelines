@@ -359,7 +359,9 @@ class Utilities {
                     def res = findCsproj(context, line)
                     context.echo "next line: ${line}"
                     if(res.matches()){
-                        def command = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${res.group(1)}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                        def csprj = res.group(1)
+                        def projectFiles = context.findFiles(glob: "**\\${csprj}")
+                        def command = "${context.env.NUGET}\\nuget pack \"${projectFiles[0].path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
                         context.echo command
                         context.bat command
                     }
