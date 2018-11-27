@@ -345,6 +345,15 @@ class Utilities {
     }
 
     @NonCPS
+    def static findCsproj(line){
+        def res = (line =~ /VirtoCommerce\..+\.csproj/)
+        if(res.size() < 1){
+            res = null
+        }
+        return res
+    }
+
+    @NonCPS
     def static getPDBDirs(context){
         def pdbDirs = []
         def currentDir = new File(context.pwd())

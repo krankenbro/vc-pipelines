@@ -3,6 +3,7 @@ import groovy.json.*
 import groovy.util.*
 import jobs.scripts.*
 import groovy.io.FileType
+import org.codehaus.groovy.tools.Utilities
 
 def call(body) {
 
@@ -63,7 +64,8 @@ def call(body) {
 							echo "build file path ${buildFilePath}"
 							def buildFile = new File(buildFilePath)
 							for (line in buildFile.readLines()) {
-								def res = (line =~ /VirtoCommerce\..+\.csproj/)
+								def res = Utilities.findCsproj(line)
+								echo "next line: ${line}"
 								if(res.size()>0){
 									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
 									echo command
