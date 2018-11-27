@@ -365,8 +365,8 @@ class Utilities {
                 for (line in buildFile.readLines()) {
                     def res = findCsproj(context, line)
                     context.echo "next line: ${line}"
-                    if(res){
-                        def command = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                    if(res.matches()){
+                        def command = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${res.group(1)}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
                         context.echo command
                         context.bat command
                     }
@@ -377,9 +377,8 @@ class Utilities {
     @NonCPS
     def static findCsproj(context, line){
         def res = (line =~/(?im)(VirtoCommerce.+csproj)/)
-        context.echo res.toString()
         if(!res.matches()){
-            res = null
+            context.echo "Not matches ${res.toString()}"
         }
         return res
     }
