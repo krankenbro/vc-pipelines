@@ -57,7 +57,7 @@ def call(body) {
 //								file.delete()
 //							}
 //						}
-						def oldFiles = findFiles(glob: "${folderPath}\\*.nupkg")
+						def oldFiles = findFiles(glob: "**\\NuGet\\*.nupkg")
 						oldFiles.each {
 							file->
 								file.delete()
