@@ -361,9 +361,12 @@ class Utilities {
                     if(res){
                         context.echo res
                         def csprj = getCsprojPath(context, res)
-                        def batCommand = "${context.env.NUGET}\\nuget pack \"${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
-                        context.echo batCommand
-                        context.bat command
+                        if(csprj){
+                            echo csprj
+                            def batCommand = "${context.env.NUGET}\\nuget pack \"${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                            context.echo batCommand
+                            context.bat batCommand
+                        }
                     }
                 }
             }
@@ -371,7 +374,10 @@ class Utilities {
     }
     @NonCPS
     def static getCsprojPath(context, name){
-        def projectFiles = context.findFiles(glob: "**\\${name}")
+        def projectFiles
+        dir(context.env.WORKSPACE){
+            projectFiles = context.findFiles(glob: "**\\${name}")
+        }
         if(projectFiles.size()>0){
             return projectFiles[0].path
         }
