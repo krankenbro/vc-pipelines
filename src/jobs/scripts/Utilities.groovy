@@ -346,17 +346,10 @@ class Utilities {
         return "${tag}_${containerId}_1"
     }
 
-    @NonCPS
     def static createNugets(context){
         String folderPath = "${context.env.WORKSPACE}\\NuGet"
         if(new File(folderPath).exists()){
-            new File(folderPath).eachFile (FileType.FILES) { file ->
-                context.echo "found file: ${file.name}"
-                if (file.name.contains('nupkg')) {
-                    context.echo "remove ${file.name}"
-                    file.delete()
-                }
-            }
+            cleanOldNugets(context)
 
             context.dir(folderPath){
                 def buildFilePath = "${folderPath}\\build.bat"
@@ -375,8 +368,19 @@ class Utilities {
         }
     }
     @NonCPS
+    def static cleanOldNugets(context){
+        String folderPath = "${context.env.WORKSPACE}\\NuGet"
+        new File(folderPath).eachFile (FileType.FILES) { file ->
+            context.echo "found file: ${file.name}"
+            if (file.name.contains('nupkg')) {
+                context.echo "remove ${file.name}"
+                file.delete()
+            }
+        }
+    }
+    @NonCPS
     def static findCsproj(context, line){
-        def res = (line =~/(?uim)(VirtoCommerce.+csproj)/)
+        def res = (line =~/(VirtoCommerce.+csproj)/)
         if(!res.matches()){
             context.echo "Not matches ${res.toString()}"
         }
