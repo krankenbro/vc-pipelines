@@ -65,7 +65,7 @@ def call(body) {
 							for (line in buildFile.readLines()) {
 								def res = Utilities.findCsproj(line)
 								echo "next line: ${line}"
-								if(res.size()>0){
+								if(res){
 									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
 									echo command
 									bat command
