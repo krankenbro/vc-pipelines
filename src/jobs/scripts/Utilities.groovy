@@ -369,7 +369,7 @@ class Utilities {
                         }
                     }
                 }
-                def nugets = context.findFiles(glob: ".nupkg")
+                def nugets = context.findFiles(glob: "**\\*.nupkg")
                 for(nuget in nugets){
                     if(!nuget.name.contains("symbols")){
                         context.echo "publish nupkg: ${nuget.name}"
