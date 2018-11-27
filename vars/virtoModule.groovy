@@ -59,8 +59,8 @@ def call(body) {
 //						}
 						def oldFiles = findFiles(glob: "**\\NuGet\\*.nupkg")
 						oldFiles.each {
-							file->
-								file.delete()
+							res->
+								new File(res.path).delete()
 						}
 
 						dir(folderPath){
