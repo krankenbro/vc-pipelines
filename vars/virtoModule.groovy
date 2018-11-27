@@ -51,16 +51,12 @@ def call(body) {
 
                     String folderPath = "${env.WORKSPACE}\\NuGet"
 					if(new File(folderPath).exists()){
-//						new File(folderPath).eachFile (FileType.FILES) { file ->
-//							if (file.extension.contains('.nupkg')) {
-//								echo "remove ${file.name}"
-//								file.delete()
-//							}
-//						}
-						def oldFiles = findFiles(glob: "**\\NuGet\\*.nupkg")
-						oldFiles.each {
-							res->
-								new File(res.path).delete()
+						new File(folderPath).eachFile (FileType.FILES) { file ->
+							echo "found file: ${file.name}"
+							if (file.extension.contains('nupkg')) {
+								echo "remove ${file.name}"
+								file.delete()
+							}
 						}
 
 						dir(folderPath){
