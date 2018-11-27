@@ -375,7 +375,9 @@ class Utilities {
     @NonCPS
     def static getCsprojPath(context, name){
         context.dir(context.env.WORKSPACE){
+            context.echo "File name is: ${name}"
             def projectFiles = context.findFiles(glob: "**\\${name}")
+            context.echo "Found path: ${projectFiles[0].path}"
             return projectFiles[0].path
         }
     }
