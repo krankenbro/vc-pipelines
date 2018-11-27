@@ -346,7 +346,7 @@ class Utilities {
         return "${tag}_${containerId}_1"
     }
 
-    @NonCSP
+    @NonCPS
     def static createNugets(context){
         String folderPath = "${context.env.WORKSPACE}\\NuGet"
         if(new File(folderPath).exists()){
