@@ -346,7 +346,6 @@ class Utilities {
         return "${tag}_${containerId}_1"
     }
 
-    @NonCPS
     def static createNugets(context){
         String folderPath = "${context.env.WORKSPACE}\\NuGet"
         if(new File(folderPath).exists()){
@@ -360,16 +359,23 @@ class Utilities {
                     context.echo "next line: ${line}"
                     def res = findCsproj(context, line)
                     if(res){
-                        def csprj = res
                         context.echo res
-                        def projectFiles = context.findFiles(glob: "**\\${csprj}")
-                        def command = "${context.env.NUGET}\\nuget pack \"${projectFiles[0].path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
-                        context.echo command
+                        def csprj = getCsprojPath(context, res)
+                        def batCommand = "${context.env.NUGET}\\nuget pack \"${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+                        context.echo batCommand
                         context.bat command
                     }
                 }
             }
         }
+    }
+    @NonCPS
+    def static getCsprojPath(context, name){
+        def projectFiles = context.findFiles(glob: "**\\${name}")
+        if(projectFiles.size()>0){
+            return projectFiles[0].path
+        }
+        return null
     }
     @NonCPS
     def static cleanOldNugets(context){
