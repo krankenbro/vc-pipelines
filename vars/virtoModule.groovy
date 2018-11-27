@@ -63,7 +63,7 @@ def call(body) {
 							echo "build file path ${buildFilePath}"
 							def buildFile = new File(buildFilePath)
 							for (line in buildFile.readLines()) {
-								def res = line =~ /VirtoCommerce\..+\.csproj/
+								def res = (line =~ /VirtoCommerce\..+\.csproj/)
 								if(res.size()>0){
 									def command = "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${res[0]}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
 									echo command
