@@ -374,11 +374,10 @@ class Utilities {
     }
     @NonCPS
     def static getCsprojPath(context, name){
-        def projectFiles
         context.dir(context.env.WORKSPACE){
-            projectFiles = context.findFiles(glob: "**\\${name}")
+            def projectFiles = context.findFiles(glob: "**\\${name}")
+            return projectFiles[0].path
         }
-        return projectFiles[0].path
     }
     @NonCPS
     def static cleanOldNugets(context){
