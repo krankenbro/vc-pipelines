@@ -375,7 +375,7 @@ class Utilities {
     @NonCPS
     def static getCsprojPath(context, name){
         def projectFiles
-        dir(context.env.WORKSPACE){
+        context.dir(context.env.WORKSPACE){
             projectFiles = context.findFiles(glob: "**\\${name}")
         }
         if(projectFiles.size()>0){
