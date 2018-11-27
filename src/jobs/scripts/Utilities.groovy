@@ -377,7 +377,7 @@ class Utilities {
             context.echo "File name is: ${name}"
             def projectFiles = context.findFiles(glob: "**\\${name}")
             context.echo "Found path: ${projectFiles[0].path}"
-            return projectFiles[0].path.toString()
+            return "${projectFiles[0].path}"
         }
     }
     @NonCPS
