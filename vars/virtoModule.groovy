@@ -56,7 +56,7 @@ def call(body) {
 						}
 
 						ws(folderPath){
-							def buildFile = new File("./build.bat")
+							def buildFile = new File("${folderPath}\\build.bat")
 							for (line in buildFile.readLines()) {
 								def res = line =~ /VirtoCommerce\..+\.csproj/
 								if(res.size()>0){
