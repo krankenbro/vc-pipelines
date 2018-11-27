@@ -360,7 +360,7 @@ class Utilities {
                     def res = findCsproj(context, line)
                     if(res){
                         context.echo res
-                        def csprj = getCsprojPath(context, res)
+                        def csprj = getCsprojPath(context, res).toString()
                         if(csprj){
                             echo csprj
                             def batCommand = "${context.env.NUGET}\\nuget pack \"${context.env.WORKSPACE}\\${csprj}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
