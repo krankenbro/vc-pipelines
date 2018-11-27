@@ -372,7 +372,6 @@ class Utilities {
             }
         }
     }
-    @NonCPS
     def static getCsprojPath(context, name){
         context.echo "File name is: ${name}"
         def projectFiles = context.findFiles(glob: "**\\${name}")
