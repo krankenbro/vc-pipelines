@@ -349,7 +349,7 @@ class Utilities {
     def static createNugets(context){
         String folderPath = "${context.env.WORKSPACE}\\NuGet"
         if(new File(folderPath).exists()){
-            cleanOldNugets(context)
+            cleanNugetFolder(context)
 
             context.dir(folderPath){
                 def buildFilePath = "${folderPath}\\build.bat"
@@ -388,7 +388,7 @@ class Utilities {
         }
     }
     @NonCPS
-    def static cleanOldNugets(context){
+    def static cleanNugetFolder(context){
         String folderPath = "${context.env.WORKSPACE}\\NuGet"
         new File(folderPath).eachFile (FileType.FILES) { file ->
             context.echo "found file: ${file.name}"

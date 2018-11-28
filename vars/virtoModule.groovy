@@ -49,16 +49,33 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
-					Utilities.createNugets(this)
-//                    String folderPath = "${env.WORKSPACE}\\NuGet"
-//					if(new File(folderPath).exists()){
-//						new File(folderPath).eachFile (FileType.FILES) { file ->
-//							echo "found file: ${file.name}"
-//							if (file.extension.contains('nupkg')) {
-//								echo "remove ${file.name}"
-//								file.delete()
-//							}
-//						}
+
+
+                    String nugetFolder = "${env.WORKSPACE}\\NuGet"
+
+					Utilities.cleanNugetFolder(this)
+					def nuspecs = findFiles glob: "**\\*.nuspec"
+					String[] csprojs
+					for (nuspec in nuspecs){
+						def nuspecParent = new File(nuspec.path).getParent()
+						csprojs.addAll(findFiles(glob: "**\\${nuspecParent}\\*.csproj"))
+					}
+					dir(nugetFolder){
+						for(csproj in csprojs){
+							bat "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${csproj.path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+						}
+						def nugets = findFiles(glob: "**\\*.nupkg")
+						for(nuget in nugets){
+							if(!nuget.name.contains("symbols")){
+								echo "publish nupkg: ${nuget.name}"
+								bat "${env.NUGET}\\nuget push ${nuget.name} -Source nuget.org -ApiKey ${env.NUGET_KEY}"
+							}
+						}
+					}
+//					def csprojs = findFiles glob: "**\\*.csproj"
+//					for(csproj in csprojs){
+//						csprojParent =
+//					}
 //
 //						dir(folderPath){
 //							def buildFilePath = "${folderPath}\\build.bat"
