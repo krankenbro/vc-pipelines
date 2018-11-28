@@ -58,7 +58,11 @@ def call(body) {
 					String[] csprojs
 					for (nuspec in nuspecs){
 						def nuspecParent = new File(nuspec.path).getParent()
-						csprojs.addAll(findFiles(glob: "**\\${nuspecParent}\\*.csproj"))
+						def found = findFiles(glob: "**\\${nuspecParent}\\*.csproj")
+						if(found){
+							csprojs.addAll(found)
+						}
+
 					}
 					dir(nugetFolder){
 						for(csproj in csprojs){
