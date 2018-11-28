@@ -53,6 +53,12 @@ def call(body) {
 
                     String nugetFolder = "${env.WORKSPACE}\\NuGet"
 
+					//msbuild /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform="Any CPU"
+					def solutions = findFiles(glob: "**\\*.sln")
+					for(solution in solutions){
+						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution.path}\" /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform=\"Any CPU\""
+					}
+
 					Utilities.cleanNugetFolder(this)
 					def nuspecs = findFiles glob: "**\\*.nuspec"
 					def csprojs = []
