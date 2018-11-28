@@ -55,7 +55,7 @@ def call(body) {
 
 					Utilities.cleanNugetFolder(this)
 					def nuspecs = findFiles glob: "**\\*.nuspec"
-					String[] csprojs
+					def csprojs = []
 					for (nuspec in nuspecs){
 						def nuspecParent = new File(nuspec.path).getParent()
 						def found = findFiles(glob: "**\\${nuspecParent}\\*.csproj")
