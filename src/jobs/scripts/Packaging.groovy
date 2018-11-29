@@ -397,6 +397,8 @@ class Packaging {
 
     def static createNugetPackages(context){
         String nugetFolder = "${context.env.WORKSPACE}\\NuGet"
+        if(!(new File(nugetFolder).exists()))
+            return
 
         def solutions = context.findFiles(glob: "**\\*.sln")
         for(solution in solutions){
