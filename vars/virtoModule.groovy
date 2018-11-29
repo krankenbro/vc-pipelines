@@ -49,39 +49,39 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
+					Packaging.createNugetPackages(this)
 
 
-                    String nugetFolder = "${env.WORKSPACE}\\NuGet"
-
-					//msbuild /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform="Any CPU"
-					def solutions = findFiles(glob: "**\\*.sln")
-					for(solution in solutions){
-						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution.path}\" /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform=\"Any CPU\""
-					}
-
-					Utilities.cleanNugetFolder(this)
-					def nuspecs = findFiles glob: "**\\*.nuspec"
-					def csprojs = []
-					for (nuspec in nuspecs){
-						def nuspecParent = new File(nuspec.path).getParent()
-						def found = findFiles(glob: "**\\${nuspecParent}\\*.csproj")
-						if(found){
-							csprojs.addAll(found)
-						}
-
-					}
-					dir(nugetFolder){
-						for(csproj in csprojs){
-							bat "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${csproj.path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
-						}
-						def nugets = findFiles(glob: "**\\*.nupkg")
-						for(nuget in nugets){
-							if(!nuget.name.contains("symbols")){
-								echo "publish nupkg: ${nuget.name}"
-								bat "${env.NUGET}\\nuget push ${nuget.name} -Source nuget.org -ApiKey ${env.NUGET_KEY}"
-							}
-						}
-					}
+//                    String nugetFolder = "${env.WORKSPACE}\\NuGet"
+//
+//					def solutions = findFiles(glob: "**\\*.sln")
+//					for(solution in solutions){
+//						bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution.path}\" /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform=\"Any CPU\""
+//					}
+//
+//					Utilities.cleanNugetFolder(this)
+//					def nuspecs = findFiles glob: "**\\*.nuspec"
+//					def csprojs = []
+//					for (nuspec in nuspecs){
+//						def nuspecParent = new File(nuspec.path).getParent()
+//						def found = findFiles(glob: "**\\${nuspecParent}\\*.csproj")
+//						if(found){
+//							csprojs.addAll(found)
+//						}
+//
+//					}
+//					dir(nugetFolder){
+//						for(csproj in csprojs){
+//							bat "${env.NUGET}\\nuget pack \"${env.WORKSPACE}\\${csproj.path}\" -IncludeReferencedProjects -Symbols -Properties Configuration=Release"
+//						}
+//						def nugets = findFiles(glob: "**\\*.nupkg")
+//						for(nuget in nugets){
+//							if(!nuget.name.contains("symbols")){
+//								echo "publish nupkg: ${nuget.name}"
+//								bat "${env.NUGET}\\nuget push ${nuget.name} -Source nuget.org -ApiKey ${env.NUGET_KEY}"
+//							}
+//						}
+//					}
 //					def csprojs = findFiles glob: "**\\*.csproj"
 //					for(csproj in csprojs){
 //						csprojParent =

@@ -109,6 +109,7 @@ def call(body){
                     Packaging.createReleaseArtifact(this, version, webProject, zipArtifact, websiteDir)
                     def websitePath = Utilities.getWebPublishFolder(this, websiteDir)
                     dockerImage = Packaging.createDockerImage(this, zipArtifact.replaceAll('\\.','/'), websitePath, ".", dockerTag)
+					Packaging.createNugetPackages(this)
                 }
             }
 
