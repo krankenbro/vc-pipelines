@@ -22,20 +22,21 @@ class Packaging {
      */
     def static createDockerImage(context, String dockerImageName, String dockerContextFolder, String dockerSourcePath, String version) {
         def dockerFileFolder = dockerImageName.replaceAll("/", ".")
-		def dockerFolder = ""
-        if(Utilities.isNetCore(context.projectType)) {
-		    dockerFolder = "docker.core\\windowsnano"
+        def dockerFolder = ""
+        if(context.projectType == 'NETCORE2') {
+            dockerFolder = "docker.core\\windowsnano"
+            dockerImageName = dockerImageName // + "-core"
         }
         else {
-		    dockerFolder = "docker"
+            dockerFolder = "docker"
         }
         context.echo "Building docker image \"${dockerImageName}\" using \"${dockerContextFolder}\" as context folder"
-        context.bat "copy \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\${dockerFolder}\\${dockerFileFolder}\\Dockerfile\" \"${dockerContextFolder}\" /Y"
+        context.bat "xcopy \"..\\workspace@libs\\vc-pipeline\\resources\\${dockerFolder}\\${dockerFileFolder}\\*\" \"${dockerContextFolder}\\\" /Y /E"
         def dockerImage
         context.dir(dockerContextFolder)
-        {
-            dockerImage = context.docker.build("${dockerImageName}:${version}".toLowerCase(), "--pull --build-arg SOURCE=\"${dockerSourcePath}\" .")
-        }
+                {
+                    dockerImage = context.docker.build("${dockerImageName}:${version}".toLowerCase(), "--pull --build-arg SOURCE=\"${dockerSourcePath}\" .")
+                }
         return dockerImage
     }
 
