@@ -399,7 +399,7 @@ class Packaging {
 
         def solutions = context.findFiles(glob: "**\\*.sln")
         for(solution in solutions){
-            bat "\"${context.tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution.path}\" /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform=\"Any CPU\""
+            context.bat "\"${context.tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution.path}\" /nologo /verbosity:n /t:Build /p:Configuration=Release;Platform=\"Any CPU\""
         }
 
         Utilities.cleanNugetFolder(context)
