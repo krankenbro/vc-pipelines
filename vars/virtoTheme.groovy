@@ -12,7 +12,6 @@ def call(body) {
     node {
         def storeName = config.sampleStore
         projectType = config.projectType
-        themeResultZip = config.themeResultZip
         if(projectType==null){
             projectType = 'Theme'
         }
