@@ -272,7 +272,10 @@ class Packaging {
             context.deleteDir()
         }        
         context.bat "npm install"
-        context.bat "bower install"
+        def bowerjs = new File("bower.json")
+        if(bowerjs.exists){
+            context.bat "bower install"
+        }
         context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
     }    
 
