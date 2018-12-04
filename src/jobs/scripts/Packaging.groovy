@@ -273,7 +273,7 @@ class Packaging {
         }        
         context.bat "npm install"
         def bowerjs = new File("bower.json")
-        if(bowerjs.exists){
+        if(bowerjs.exists()){
             context.bat "bower install"
         }
         context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
