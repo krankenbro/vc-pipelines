@@ -272,7 +272,7 @@ class Packaging {
             context.deleteDir()
         }        
         context.bat "npm install"
-        def bowerjs = new File("bower.json")
+        def bowerjs = new File("${context.env.WORKSPACE}\\bower.json")
         if(bowerjs.exists()){
             context.bat "bower install"
         }
