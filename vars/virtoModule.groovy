@@ -191,7 +191,7 @@ def call(body) {
 				}
 
 				stage('Theme build and deploy'){
-					def themePath = "${env.WORKSPACE}@tmp\\theme\\theme.zip"
+					def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
 					build(job: "../vc-theme-default/master", parameters: [string(name: 'themeResultZip', value: themePath)])
 				}
 
