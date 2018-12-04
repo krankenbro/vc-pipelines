@@ -35,6 +35,7 @@ def call(body) {
                 }
             }
 
+            echo "ThemeResultZip is: ${themeResultZip}"
             if(themeResultZip != null){
                 def artifacts = findFiles(glob: 'artifacts/*.zip')
                 for(artifact in artifacts){
