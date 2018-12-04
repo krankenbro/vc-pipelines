@@ -190,6 +190,11 @@ def call(body) {
 					}
 				}
 
+				stage('Theme build and deploy'){
+					def themePath = "${env.WORKSPACE}@tmp\\theme\\theme.zip"
+					build(job: "../vc-theme-default/master", themeResultZip: themePath)
+				}
+
 				stage('Swagger Validation') {
 					timestamps {
 						def tempFolder = Utilities.getTempFolder(this)

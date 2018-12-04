@@ -12,6 +12,7 @@ def call(body) {
     node {
         def storeName = config.sampleStore
         projectType = config.projectType
+        themeResultZip = config.themeResultZip
         if(projectType==null){
             projectType = 'Theme'
         }
@@ -31,6 +32,13 @@ def call(body) {
                 timestamps {
                     Packaging.startAnalyzer(this)
                     Packaging.runGulpBuild(this)
+                }
+            }
+
+            if(themeResultZip != null){
+                def artifacts = findFiles(glob: 'artifacts/*.zip')
+                for(artifact in artifacts){
+                    bat "copy /Y \"${artifact.path}\" \"${themeResultZip}\""
                 }
             }
 
