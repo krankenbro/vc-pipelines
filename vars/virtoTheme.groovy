@@ -34,11 +34,11 @@ def call(body) {
                 }
             }
 
-            echo "ThemeResultZip is: ${themeResultZip}"
-            if(themeResultZip != null){
+            echo "ThemeResultZip is: ${params.themeResultZip}"
+            if(params.themeResultZip != null){
                 def artifacts = findFiles(glob: 'artifacts/*.zip')
                 for(artifact in artifacts){
-                    bat "copy /Y \"${artifact.path}\" \"${themeResultZip}\""
+                    bat "copy /Y \"${artifact.path}\" \"${params.themeResultZip}\""
                 }
             }
 
