@@ -1,6 +1,7 @@
 package jobs.scripts
 
-import org.apache.tools.ant.taskdefs.Sleep;
+import org.apache.tools.ant.taskdefs.Sleep
+import org.codehaus.groovy.tools.Utilities;
 
 class Packaging {
 
@@ -374,7 +375,12 @@ class Packaging {
 	def static installModule(context, path, moduleId, platformContainer)
 	{
  		context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-module.ps1\" -apiurl \"${Utilities.getPlatformHost(context)}\" -moduleZipArchievePath \"${path}\" -moduleId \"${moduleId}\" -platformContainer ${platformContainer} -ErrorAction Stop"
-	}    
+	}
+
+    def static installTheme(context, path){
+        def platformContainer = Utilities.getPlatformContainer(context)
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-module.ps1\" -themeZip ${path} -platformContainer ${platformContainer} -ErrorAction Stop"
+    }
 
 	def static publishThemePackage(context)
 	{
