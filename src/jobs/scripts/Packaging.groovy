@@ -378,7 +378,7 @@ class Packaging {
 
     def static installTheme(context, path){
         def platformContainer = Utilities.getPlatformContainer(context)
-        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-theme.ps1\" -themeZip ${path} -platformContainer ${platformContainer} -ErrorAction Stop"
+        context.bat "powershell.exe -File \"${context.env.WORKSPACE}@libs\\${DefaultSharedLibName}\\resources\\azure\\vc-install-theme.ps1\" -themeZip \"${path}\" -platformContainer ${platformContainer} -ErrorAction Stop"
     }
 
 	def static publishThemePackage(context)
