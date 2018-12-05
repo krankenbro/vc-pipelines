@@ -1,7 +1,6 @@
 package jobs.scripts
 
 import org.apache.tools.ant.taskdefs.Sleep
-import org.codehaus.groovy.tools.Utilities;
 
 class Packaging {
 
