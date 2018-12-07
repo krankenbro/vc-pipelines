@@ -166,8 +166,8 @@ def call(body) {
                 if (env.BRANCH_NAME == 'master') {
                     stage('Build platform and storefront') {
                         timestamps{
-                            build("../vc-platform/${env.BRANCH_NAME}", parameters: [string(name: 'isCaused', value: true)])
-                            build("../vc-storefront-core/${env.BRANCH_NAME}", parameters: [string(name: 'isCaused', value: true)])
+                            build(job: "../vc-platform/${env.BRANCH_NAME}", parameters: [string(name: 'isCaused', value: true)])
+                            build(job: "../vc-storefront-core/${env.BRANCH_NAME}", parameters: [string(name: 'isCaused', value: true)])
                         }
                     }
                 }
