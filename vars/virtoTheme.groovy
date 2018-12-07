@@ -31,8 +31,8 @@ def call(body) {
                 timestamps {
                     Packaging.runGulpBuild(this)
                     echo "run gulp done"
-                    bat "node node_modules\\eslint\\bin\\eslint.js .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json -f json -o ${env.WORKSPACE}@tmp\\report.json"
-                    echo "eslint done"
+                    def res = bat returnStatus: true, script:"node node_modules\\eslint\\bin\\eslint.js .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json -f json -o ${env.WORKSPACE}@tmp\\report.json"
+                    echo "eslint done. res is ${res}"
                     Packaging.startSonarJS(this)
                 }
             }
