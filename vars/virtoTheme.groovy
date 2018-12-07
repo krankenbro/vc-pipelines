@@ -29,9 +29,9 @@ def call(body) {
 
             stage('Build + Analyze') {
                 timestamps {
+                    Packaging.runGulpBuild(this)
                     bat "eslint .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json -f json -o ${env.WORKSPACE}@tmp\\report.json"
                     Packaging.startSonarJS(this)
-                    Packaging.runGulpBuild(this)
                 }
             }
 
