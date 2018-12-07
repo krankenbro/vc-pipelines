@@ -249,7 +249,8 @@ class Packaging {
         def sqScannerMsBuildHome = context.tool 'Scanner for MSBuild'
         def fullJobName = Utilities.getRepoName(context)
         //\sonar-scanner-3.2.0.1227\\bin\\sonar-scanner.bat
-        context.bat "\"${sqScannerMsBuildHome}\\sonar-scanner-3.2.0.1227\\bin\\sonar-scanner.bat\" begin /d:\"sonar.branch=${context.env.BRANCH_NAME}\" /n:\"${fullJobName}\" /k:\"${fullJobName}\" /d:sonar.host.url=%SONAR_HOST_URL% /d:sonar.login=%SONAR_AUTH_TOKEN% /d:sonar.eslint.reportPaths=\"${context.env.WORKSPACE}@tmp\\report.json\""
+        context.bat "\"${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe\" begin /d:\"sonar.branch=${context.env.BRANCH_NAME}\" /n:\"${fullJobName}\" /k:\"${fullJobName}\" /d:sonar.host.url=%SONAR_HOST_URL% /d:sonar.login=%SONAR_AUTH_TOKEN% /d:sonar.eslint.reportPaths=\"${context.env.WORKSPACE}@tmp\\report.json\""
+        context.bat "\"${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe\" end /d:sonar.login=%SONAR_AUTH_TOKEN%"
     }
 
     def static endAnalyzer(context)
