@@ -163,12 +163,14 @@ def call(body) {
 				if (env.BRANCH_NAME == 'master') {
 					dockerTag = "latest"
 				}
-				stage('Build platform and storefront') {
-					timestamps {
-						//build("../vc-platform/${dockerTag}")
-						//build("../vc-storefront-core/${dockerTag}")
-					}
-				}
+                if (env.BRANCH_NAME == 'master') {
+                    stage('Build platform and storefront') {
+                        timestamps{
+                            build("../vc-platform/${env.BRANCH_NAME}", parameters: [booleanParam(name: 'isCaused', value: true)])
+                            build("../vc-storefront-core/${env.BRANCH_NAME}", parameters: [booleanParam(name: 'isCaused', value: true)])
+                        }
+                    }
+                }
 				stage('Prepare Test Environment') {
 					timestamps {
 						def moduleId = Modules.getModuleId(this)
@@ -192,7 +194,7 @@ def call(body) {
 
 				stage('Theme build and deploy'){
 					def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
-					build(job: "../vc-theme-default/master", parameters: [string(name: 'themeResultZip', value: themePath)])
+					build(job: "../vc-theme-default/${env.BRANCH_NAME}", parameters: [string(name: 'themeResultZip', value: themePath)])
 					Packaging.installTheme(this, themePath)
 				}
 

@@ -244,6 +244,10 @@ class Packaging {
         }        
     }
 
+    def static runSonarJS(context){
+
+    }
+
     def static endAnalyzer(context)
     {
         def sqScannerMsBuildHome = context.tool 'Scanner for MSBuild'

@@ -16,6 +16,10 @@ def call(body){
 	solution = config.solution
 	projectType = config.projectType
 	node () {
+		def isCaused = params.isCaused;
+		if(isCaused == null){
+			isCaused = false
+		}
 		if(solution == null) {
 			solution = "VirtoCommerce.Platform.sln"
 		}
@@ -157,6 +161,9 @@ def call(body){
                     }
                 }
             }
+
+			echo "Is it Caused? ${isCaused}"
+
 
 
 
