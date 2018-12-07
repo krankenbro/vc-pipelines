@@ -30,7 +30,9 @@ def call(body) {
             stage('Build + Analyze') {
                 timestamps {
                     Packaging.runGulpBuild(this)
+                    echo "run gulp done"
                     bat "node node_modules\\eslint\\bin\\eslint.js .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json -f json -o ${env.WORKSPACE}@tmp\\report.json"
+                    echo "eslint done"
                     Packaging.startSonarJS(this)
                 }
             }

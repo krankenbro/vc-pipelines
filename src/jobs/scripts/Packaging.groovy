@@ -245,6 +245,7 @@ class Packaging {
     }
 
     def static startSonarJS(context){
+        context.echo "Packaging.startSonarJS"
         def sqScannerMsBuildHome = context.tool 'Scanner for MSBuild'
         def fullJobName = Utilities.getRepoName(context)
         //\sonar-scanner-3.2.0.1227\\bin\\sonar-scanner.bat
