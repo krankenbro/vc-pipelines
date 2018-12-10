@@ -31,9 +31,9 @@ def call(body) {
                 timestamps {
                     Packaging.runGulpBuild(this)
                     echo "run gulp done"
-                    def res = bat returnStatus: true, script:"node node_modules\\eslint\\bin\\eslint.js .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json -f json -o ${env.WORKSPACE}@tmp\\report.json"
+                    def res = bat returnStatus: true, script:"node node_modules\\eslint\\bin\\eslint.js .\\assets\\js\\**\\*.js .\\assets\\*.js -c .\\.eslintrc.json"// -f json -o ${env.WORKSPACE}@tmp\\report.json"
                     echo "eslint done. res is ${res}"
-                    Packaging.startSonarJS(this)
+//                    Packaging.startSonarJS(this)
                 }
             }
 
@@ -45,11 +45,11 @@ def call(body) {
                 }
             }
 
-            stage('Quality Gate'){
-                timestamps{
-                    Packaging.checkAnalyzerGate(this)
-                }
-            }
+//            stage('Quality Gate'){
+//                timestamps{
+//                    Packaging.checkAnalyzerGate(this)
+//                }
+//            }
 
 //            def version = Utilities.getPackageVersion(this)
 //
