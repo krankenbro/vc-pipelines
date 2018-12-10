@@ -162,6 +162,27 @@ def call(body){
                 }
             }
 
+            stage('E2E') {
+                timestamps {
+                    def tmp = Utilities.getTempFolder(this)
+                    def e2eDir = "${tmp}\\e2e"
+                    dir(e2eDir) {
+                        deleteDir()
+                        git credentialsId: 'github', url: 'https://github.com/VirtoCommerce/vc-platform-qg.git'
+                        def sfPort = Utilities.getStorefrontPort(this)
+                        //CODECEPT_OUTPUT value must be escaped
+                        def allureResultsPath = "${env.WORKSPACE}\\allure-results"
+                        def allureReportPath = "${env.WORKSPACE}\\allure-report"
+                        dir(allureReportPath){
+                            deleteDir()
+                        }
+                        def allureResultsEsc = allureResultsPath.replace("\\", "\\\\")
+                        def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
+                        bat "codeceptjs run -o \"${jsonConf}\""
+                    }
+                }
+            }
+
 			echo "Is it Caused? ${isCaused}"
 
 
