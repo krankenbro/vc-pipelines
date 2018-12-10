@@ -45,6 +45,12 @@ def call(body) {
                 }
             }
 
+            stage('Quality Gate'){
+                timestamps{
+                    Packaging.checkAnalyzerGate(this)
+                }
+            }
+
 //            def version = Utilities.getPackageVersion(this)
 //
 //            if (Packaging.getShouldStage(this)) {
