@@ -60,5 +60,23 @@ Write-Output "Search index building"
 $searchBody = @"
 [{"documentType":"Product","deleteExistingIndex":false},{"documentType":"Category","deleteExistingIndex":false},{"documentType":"Member","deleteExistingIndex":false}]
 "@
-Invoke-RestMethod -Uri $searchIndexUrl -Method Post -Headers $headers -Body $searchBody -ContentType "application/json"
-Start-Sleep -s 5
+$searchIndexResult = Invoke-RestMethod -Uri $searchIndexUrl -Method Post -Headers $headers -Body $searchBody -ContentType "application/json"
+$notificationId = $searchIndexResult.id
+$NotificationStateJson = @"
+     {"Ids":["$notificationId"],"start":0, "count": 1}
+"@
+
+$notify = @{}
+do {
+    Start-Sleep -s 3
+    $state = Invoke-RestMethod "$sdStateUrl" -Body $NotificationStateJson -Method Post -ContentType "application/json" -Headers $headers
+    Write-Output $state
+    if ($state.notifyEvents -ne $null ) {
+        $notify = $state.notifyEvents
+        if ($notify.errorCount -gt 0) {
+            Write-Output $notify
+            exit 1
+        }
+    }
+}
+while (([string]::IsNullOrEmpty($notify.finished)) -and $cycleCount -lt 180)
