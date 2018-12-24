@@ -26,7 +26,7 @@ if([string]::IsNullOrWhiteSpace($sampleDataSrc)){
     $sdInstallUrl = "$apiurl/api/platform/sampledata/import?url=$sampleDataSrc"
 }
 
-$searchIndexUrl = "$apiurl/admin/api/search/indexes/index"
+$searchIndexUrl = "$apiurl/api/search/indexes/index"
 
 
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
