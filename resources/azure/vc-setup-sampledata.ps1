@@ -26,6 +26,8 @@ if([string]::IsNullOrWhiteSpace($sampleDataSrc)){
     $sdInstallUrl = "$apiurl/api/platform/sampledata/import?url=$sampleDataSrc"
 }
 
+$searchIndexUrl = "$apiurl/admin/api/search/indexes/index"
+
 
 $headerValue = Create-Authorization $hmacAppId $hmacSecret
 $headers = @{}
@@ -53,3 +55,10 @@ do {
 }
 while (([string]::IsNullOrEmpty($notify.finished)) -and $cycleCount -lt 180)
 Write-Output "Sample data installation complete"
+
+Write-Output "Search index building"
+$searchBody = @"
+[{"documentType":"Product","deleteExistingIndex":false},{"documentType":"Category","deleteExistingIndex":false},{"documentType":"Member","deleteExistingIndex":false}]
+"@
+Invoke-RestMethod -Uri $searchIndexUrl -Method Post -Headers $headers -Body $searchBody -ContentType "application/json"
+Start-Sleep -s 5
