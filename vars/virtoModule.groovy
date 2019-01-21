@@ -222,7 +222,7 @@ def call(body) {
 								deleteDir()
 							}
 							def allureResultsEsc = allureResultsPath.replace("\\", "\\\\")
-							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\",\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
+							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\", \\\\\\\"timeout\\\\\\\":30000,\\\"helpers\\\":{\\\"Protractor\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
 							bat "codeceptjs run -o \"${jsonConf}\""
 						}
 					}
