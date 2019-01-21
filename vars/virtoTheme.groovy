@@ -38,17 +38,18 @@ def call(body) {
                 }
             }
 
+            stage('Quality Gate'){
+                timestamps{
+                    Packaging.checkAnalyzerGate(this)
+                }
+            }
+
+
             echo "ThemeResultZip is: ${params.themeResultZip}"
             if(params.themeResultZip != null){
                 def artifacts = findFiles(glob: 'artifacts/*.zip')
                 for(artifact in artifacts){
                     bat "copy /Y \"${artifact.path}\" \"${params.themeResultZip}\""
-                }
-            }
-
-            stage('Quality Gate'){
-                timestamps{
-                    Packaging.checkAnalyzerGate(this)
                 }
             }
 
