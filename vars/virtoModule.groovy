@@ -223,7 +223,7 @@ def call(body) {
 							}
 							def allureResultsEsc = allureResultsPath.replace("\\", "\\\\")
 							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\", \\\"helpers\\\":{\\\"WebDriverIO\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
-							bat "codeceptjs run -o \"${jsonConf}\""
+							bat "codeceptjs run --steps -o \"${jsonConf}\""
 						}
 					}
 				}
