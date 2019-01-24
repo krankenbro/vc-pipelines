@@ -22,13 +22,6 @@ def call(body) {
 		}
 
 		try {
-			stage("Colors"){
-				wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']){
-					bat "echo ^<ESC^>[41m \u001B[41mError\u001B[0m"
-				}
-				bat "echo ^<ESC^>[41m \u001B[41mError\u001B[0m"
-			}
-
 			stage("Checkout") {
 				timestamps {
 					checkout scm
