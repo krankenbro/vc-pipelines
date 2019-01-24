@@ -4,6 +4,7 @@ import groovy.util.*
 import jobs.scripts.*
 import groovy.io.FileType
 
+wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm'])
 def call(body) {
 
 	// evaluate the body block, and collect configuration into the object
