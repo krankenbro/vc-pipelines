@@ -242,6 +242,7 @@ def call(body) {
 			def failedStageLog = Utilities.getFailedStageStr(log)
 			def failedStageName = Utilities.getFailedStageName(failedStageLog)
 			Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageName} \n\n${failedStageLog}"
+			echo "^<ESC^>[41m \u001B[41mError\u001B[0m"
 			throw e
 		}
 		finally {
