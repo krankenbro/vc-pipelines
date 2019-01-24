@@ -4,7 +4,6 @@ import groovy.util.*
 import jobs.scripts.*
 import groovy.io.FileType
 
-wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm'])
 def call(body) {
 
 	// evaluate the body block, and collect configuration into the object
@@ -23,6 +22,13 @@ def call(body) {
 		}
 
 		try {
+			stage("Colors"){
+				wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']){
+					bat "echo ^<ESC^>[41m \u001B[41mError\u001B[0m"
+				}
+				bat "echo ^<ESC^>[41m \u001B[41mError\u001B[0m"
+			}
+
 			stage("Checkout") {
 				timestamps {
 					checkout scm
@@ -242,7 +248,6 @@ def call(body) {
 			def failedStageLog = Utilities.getFailedStageStr(log)
 			def failedStageName = Utilities.getFailedStageName(failedStageLog)
 			Utilities.sendMail this, "${currentBuild.currentResult}", "${e.getMessage()}\n${e.getCause()}\n${failedStageName} \n\n${failedStageLog}"
-			bat "echo ^<ESC^>[41m \u001B[41mError\u001B[0m"
 			throw e
 		}
 		finally {
