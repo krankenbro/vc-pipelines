@@ -222,7 +222,7 @@ def call(body) {
 								deleteDir()
 							}
 							def allureResultsEsc = allureResultsPath.replace("\\", "\\\\")
-							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\", \\\"helpers\\\":{\\\"WebDriverIO\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
+							def jsonConf = "{\\\"output\\\":\\\"${allureResultsEsc}\\\", \\\"helpers\\\":{\\\"WebDriver\\\":{\\\"url\\\":\\\"http://localhost:${sfPort}\\\"}}}"
 							bat "codeceptjs run --steps -o \"${jsonConf}\""
 						}
 					}
