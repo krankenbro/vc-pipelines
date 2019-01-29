@@ -22,17 +22,6 @@ def call(body) {
 		}
 
 		try {
-			stage('Colors'){
-				ansiColor('xterm') {
-					echo "just echo"
-					echo "^<ESC^>[33m [33mYellow[0m"
-					echo "bat"
-					bat "echo ^<ESC^>[33m \u001B[33mYellow\u001B[0m"
-					echo "powershell"
-					powershell "echo ^<ESC^>[33m \u001B[33mYellow\u001B[0m"
-					exit 0
-				}
-			}
 
 			stage("Checkout") {
 				timestamps {
