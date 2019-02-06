@@ -38,8 +38,8 @@ def call(body) {
 						Packaging.startAnalyzer(this)
 						for (int i = 0; i < solutions.size(); i++) {
 							def solution = solutions[i]
-							bat "${env.NUGET}\\nuget restore ${solution}"
-							bat "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m"
+							bat script: "${env.NUGET}\\nuget restore ${solution}", label: "Restoring nuget packages"
+							bat script: "\"${tool 'DefaultMSBuild'}\\msbuild.exe\" \"${solution}\" /p:Configuration=Debug /p:Platform=\"Any CPU\" /t:rebuild /m", label: "Build Project"
 						}
 					}
 				}
@@ -50,7 +50,7 @@ def call(body) {
 				timestamps {
 					processManifests(false) // prepare artifacts for testing
 
-					Packaging.createNugetPackages(this)
+					//Packaging.createNugetPackages(this)
 
 
 //                    String nugetFolder = "${env.WORKSPACE}\\NuGet"
@@ -247,6 +247,10 @@ def call(body) {
 		finally {
 			allure includeProperties: false, jdk: '', results: [[path: "./../workspace@tmp/output"]]
 			Packaging.stopDockerTestEnvironment(this, dockerTag)
+			step([$class: 'LogParserPublisher',
+				  failBuildOnError: true,
+				  parsingRulesPath: "C:\\CICD\\parser_rules.txt",
+				  useProjectRule: false])
 			if (currentBuild.result != 'FAILURE') {
 				Utilities.sendMail(this, "${currentBuild.currentResult}")
 			}
