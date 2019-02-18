@@ -36,7 +36,7 @@ class Utilities {
     def static runSharedPS(context, scriptName, args = '')
     {
     	def wsFolder = context.pwd()
- 	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}\\${scriptName}\" ${args} -ErrorAction Stop"
+ 	    context.bat "powershell.exe -File \"${wsFolder}\\..\\workspace@libs\\${DefaultSharedLibName}resources\\azure\\${scriptName}\" ${args} -ErrorAction Stop"
     }
 
     def static getAssemblyVersion(context, projectFile)
