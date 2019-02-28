@@ -16,6 +16,7 @@ def call(body){
 	solution = config.solution
 	projectType = config.projectType
 	node () {
+		properties([disableConcurrentBuilds()])
 		def isCaused = params.isCaused;
 		if(isCaused == null){
 			isCaused = false

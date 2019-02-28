@@ -14,6 +14,7 @@ def call(body) {
 	body()
 
 	node {
+		properties([disableConcurrentBuilds()])
 
 		def dockerTag = "${env.BRANCH_NAME}-branch"
 
